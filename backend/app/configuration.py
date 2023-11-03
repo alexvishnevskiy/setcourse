@@ -2,7 +2,7 @@ class Config(object):
 	"""
 	Configuration base, for all environments.
 	"""
-	DEBUG = False
+	DEBUG = True
 	TESTING = False
 	SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://alex:alex@localhost/setcourse'
 	SECRET_KEY = "MINHACHAVESECRETA"
