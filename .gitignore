@@ -182,3 +182,6 @@ frontend/.env.production.local
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
+
+.DS_Store
+*/.DS_Store
