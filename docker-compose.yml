@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql
+    container_name: mysql-setcourse
+    environment:
+      MYSQL_ROOT_PASSWORD: alex
+      MYSQL_USER: alex
+      MYSQL_PASSWORD: alex
+      MYSQL_DATABASE: setcourse
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init-db.sql
+      # - db_data:/var/lib/mysql
+
+# volumes:
+#   db_data:
+#     driver: local
