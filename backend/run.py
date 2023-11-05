@@ -28,6 +28,46 @@ def add_course(schedule_id, class_id):
     else:
         return jsonify({"message": f"Internal error: {status.__str__}"}), HTTPStatus.INTERNAL_SERVER_ERROR
 
+@app.route('/courses/delete/<int:schedule_id>/<int:class_id>', methods=['DELETE'])
+def delete_course(schedule_id, class_id):
+    # delete course from specific scheduler
+    return
+
+@app.route('/reviews/add/<int:professor_id>/<int:class_id>', methods=['POST'])
+def add_review():
+    # add review
+    return
+
+@app.route('/reviews/delete/<int:professor_id>/<int:class_id>', methods=['DELETE'])
+def delete_review():
+    # delete review
+    return
+
+@app.route('/schedule/create/<int:user_id>/<str:term>', methods=['POST'])
+def create_schedule():
+    # create schedule
+    return
+
+@app.route('/schedule/delete/<int:user_id>/<str:term>', methods=['DELETE'])
+def delete_schedule():
+    # delete schedule
+    return
+
+@app.route('/schedule/get/<int:user_id>', methods=['GET'])
+def list_all_schedules():
+    # list all schedules for specific user
+    return
+
+@app.route('/courses/get/<str:term>', methods=['GET'])
+def list_all_courses():
+    # list all courses for specific term and (probably) times
+    return
+
+@app.route('/reviews/get/<int:professor_id>/<int:class_id>', methods=['GET'])
+def list_all_reviews():
+    # list all reviews
+    return
+
 if __name__ == "__main__":
 	port = int(os.environ.get("PORT", 8080))
 	app.run(host='0.0.0.0', port=port)
