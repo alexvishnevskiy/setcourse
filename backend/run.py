@@ -35,7 +35,7 @@ def delete_course(schedule_id, class_id):
 
 @app.route('/reviews/add/<int:professor_id>/<int:class_id>', methods=['POST'])
 def add_review():
-    # add review
+
     return
 
 @app.route('/reviews/delete/<int:professor_id>/<int:class_id>', methods=['DELETE'])
