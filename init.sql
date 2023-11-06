@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS schedule (
 CREATE TABLE IF NOT EXISTS course (
   c_id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL,
+  units INT NOT NULL,
   PRIMARY KEY (c_id)
 );
 
@@ -66,43 +67,43 @@ CREATE TABLE IF NOT EXISTS schedule2class (
 );
 
 -- User
-INSERT IGNORE INTO user (first_name, last_name) VALUES ('Alice', 'Smith') ON DUPLICATE KEY UPDATE term = VALUES(term);;
-INSERT IGNORE INTO user (first_name, last_name) VALUES ('Bob', 'Johnson');
+INSERT  INTO user (first_name, last_name) VALUES ('Alice', 'Smith');
+INSERT  INTO user (first_name, last_name) VALUES ('Bob', 'Johnson');
 
 -- Schedule 
-INSERT IGNORE INTO schedule (user_id, term) VALUES (1, 'Winter');
-INSERT IGNORE INTO schedule (user_id, term) VALUES (1, 'Fall');
-INSERT IGNORE INTO schedule (user_id, term) VALUES (2, 'Fall');
+INSERT  INTO schedule (user_id, term) VALUES (1, 'Winter');
+INSERT  INTO schedule (user_id, term) VALUES (1, 'Fall');
+INSERT  INTO schedule (user_id, term) VALUES (2, 'Fall');
 
 -- Course
-INSERT IGNORE INTO course (name) VALUES ('CSCI 180');
-INSERT IGNORE INTO course (name) VALUES ('SOCI 143');
+INSERT  INTO course (name, units) VALUES ('CSCI 180', 5);
+INSERT  INTO course (name, units) VALUES ('SOCI 143', 5);
 
 -- Classes
-INSERT IGNORE INTO classes (time, term, c_id) VALUES ('10:00 - 11:30', 'Fall', 1);
-INSERT IGNORE INTO classes (time, term, c_id) VALUES ('10:00 - 11:30', 'Winter', 1);
-INSERT IGNORE INTO classes (time, term, c_id) VALUES ('10:00 - 11:30', 'Spring', 2);
-INSERT IGNORE INTO classes (time, term, c_id) VALUES ('10:00 - 11:30', 'Summer', 2);
+INSERT  INTO classes (time, term, c_id) VALUES ('10:00 - 11:30', 'Fall', 1);
+INSERT  INTO classes (time, term, c_id) VALUES ('10:00 - 11:30', 'Winter', 1);
+INSERT  INTO classes (time, term, c_id) VALUES ('10:00 - 11:30', 'Spring', 2);
+INSERT  INTO classes (time, term, c_id) VALUES ('10:00 - 11:30', 'Summer', 2);
 
 -- Professors
-INSERT IGNORE INTO professors (first_name, last_name) VALUES ('John', 'Doe');
-INSERT IGNORE INTO professors (first_name, last_name) VALUES ('Alex', 'White');
-INSERT IGNORE INTO professors (first_name, last_name) VALUES ('Roze', 'Ding');
+INSERT  INTO professors (first_name, last_name) VALUES ('John', 'Doe');
+INSERT  INTO professors (first_name, last_name) VALUES ('Alex', 'White');
+INSERT  INTO professors (first_name, last_name) VALUES ('Roze', 'Ding');
 
 -- Reviews
-INSERT IGNORE INTO reviews (pr_id, cl_id, review, user_id) VALUES (1, 1, 'Great class!', 1);
-INSERT IGNORE INTO reviews (pr_id, cl_id, review, user_id) VALUES (1, 2, 'Very informative and engaging.', 2);
-INSERT IGNORE INTO reviews (pr_id, cl_id, review, user_id) VALUES (2, 1, 'I learned a lot from this course.', 1);
+INSERT INTO reviews (pr_id, cl_id, review, user_id) VALUES (1, 1, 'Great class!', 1);
+INSERT INTO reviews (pr_id, cl_id, review, user_id) VALUES (1, 2, 'Very informative and engaging.', 2);
+INSERT INTO reviews (pr_id, cl_id, review, user_id) VALUES (2, 1, 'I learned a lot from this course.', 1);
  
 -- Teach
-INSERT IGNORE INTO teach (pr_id, cl_id) VALUES (1, 1);
-INSERT IGNORE INTO teach (pr_id, cl_id) VALUES (1, 3);
-INSERT IGNORE INTO teach (pr_id, cl_id) VALUES (2, 2);
-INSERT IGNORE INTO teach (pr_id, cl_id) VALUES (3, 3);
+INSERT INTO teach (pr_id, cl_id) VALUES (1, 1);
+INSERT INTO teach (pr_id, cl_id) VALUES (1, 3);
+INSERT INTO teach (pr_id, cl_id) VALUES (2, 2);
+INSERT INTO teach (pr_id, cl_id) VALUES (3, 3);
 
 -- Schedule2class
-INSERT IGNORE INTO schedule2class(cl_id, sch_id) VALUES (1, 1);
-INSERT IGNORE INTO schedule2class(cl_id, sch_id) VALUES (2, 1);
-INSERT IGNORE INTO schedule2class(cl_id, sch_id) VALUES (3, 1);
-INSERT IGNORE INTO schedule2class(cl_id, sch_id) VALUES (4, 2);
-INSERT IGNORE INTO schedule2class(cl_id, sch_id) VALUES (4, );
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (1, 1);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (2, 1);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 1);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (4, 2);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (4, 2);
