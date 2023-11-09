@@ -2,10 +2,11 @@ from app import db
 from enum import Enum
 
 class ChoiceEnum(Enum):
-    OPTION_1 = "Fall"
-    OPTION_2 = "Winter"
-    OPTION_3 = "Spring"
-    OPTION_4 = "Summer"
+    Fall = "Fall"
+    Winter = "Winter"
+    Spring = "Spring"
+    Summer = "Summer"
+
 
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
@@ -52,5 +53,6 @@ class Teach(db.Model):
     cl_id = db.Column(db.Integer, db.ForeignKey('classes.cl_id'), primary_key=True)
 
 class Schedule2Class(db.Model):
+    __tablename__ = 'schedule2class'
     cl_id = db.Column(db.Integer, db.ForeignKey('classes.cl_id'), primary_key=True)
     sch_id = db.Column(db.Integer, db.ForeignKey('schedule.sch_id'), primary_key=True)

@@ -1,0 +1,15 @@
+button {
+    flex: 1;
+    cursor: pointer; 
+}
+
+.wrapper {
+    height: 110px;
+    z-index: 100 !important; 
+}
+
+.backdrop {
+    z-index: 99 !important;
+    opacity: .5;
+}
+
