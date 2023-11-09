@@ -3,6 +3,7 @@ import CourseList from '../components/CourseList';
 import Header from '../components/Header'; 
 import SearchBar from '../components/SearchBar';
 import SearchSidebar from '../components/SearchSidebar';
+import Notification from '../components/Notification';
 import { BiCalendar } from 'react-icons/bi';
 import React, { useState, useEffect } from 'react';
 import CourseInfoModal from '../components/CourseInfoModal';
@@ -14,6 +15,10 @@ function Search() {
 
     const [openCourseInfoModal, setOpenCourseInfoModal] = useState(false);
     const [courseInfo, setCourseInfo] = useState(undefined); 
+
+    const [showStatus, setShowStatus] = useState(false); 
+    const [status, setStatus] = useState(false); 
+
 
     useEffect(() => {
         //send request to get all classes for current term 
@@ -80,6 +85,11 @@ function Search() {
 
     const onAddCourse = (course_id) => {
         console.log("course add clicked for course:", course_id);
+        //add course based on course_id to schedule
+        //returns success: success
+        //returns failure: unsuccessful
+        setStatus(true); 
+        setShowStatus(true); 
         setOpenCourseInfoModal(prevState => !prevState)
         setCourseInfo(undefined);
     }
@@ -103,6 +113,7 @@ function Search() {
                     id: 2
                 }
             ]}/>}
+            {showStatus && <Notification status={status} setShowStatus={setShowStatus}/> }
             <Header /> 
             <div className='site-body search-wrapper m-3 p-0 gap-2 d-flex' style={{flex: 1, minHeight: 0}}>
                 <SearchSidebar /> 

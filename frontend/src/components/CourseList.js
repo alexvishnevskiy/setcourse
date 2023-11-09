@@ -1,3 +1,5 @@
+import { FcPlus } from 'react-icons/fc';
+
 function CourseList({ result, handleShowCourseInfo }) {
     return (
       <div className="m-0 py-3 px-3 rounded-3 d-flex justify-content-between align-items-center" style={{
@@ -13,7 +15,9 @@ function CourseList({ result, handleShowCourseInfo }) {
         </div>
         <div className="d-flex align-items-center gap-3">
             <p className="m-0 p-0">{result.professor}</p>
-            <p className="m-0 p-0" onClick={() => {handleShowCourseInfo(result.id)}}>Button</p>
+            <div className="m-0 p-1 rounded-1 d-flex justify-content-center align-items-center" style={{cursor: 'pointer'}} onClick={() => {handleShowCourseInfo(result.id)}}>
+              <FcPlus size={20} /> 
+            </div>
         </div>
       </div>
     );
