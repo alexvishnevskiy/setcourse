@@ -19,12 +19,6 @@ def addClassToSchedule(scheduleID, classID):
         else:
             return CLASS_EXISTS            
 
-def getSectionDetails(sectionID):
-    pass
-
-def getProfDetails(professorID):
-    pass
-
 def getSchedule(scheduleID):
     # query schedule details
     schedule = models.Schedule.query.get(scheduleID)
@@ -61,8 +55,24 @@ def getClassesFromSchedule(scheduleID):
     # return classes_id
     schedule2class = models.Schedule2Class.query.filter_by(sch_id=scheduleID).all()
     if schedule2class is None:
-        return None, NO_CLASSES_FOR_THIS_SCHEDULE
+        return [], NO_CLASSES_FOR_THIS_SCHEDULE
     return [sch2class.cl_id for sch2class in schedule2class], SUCCESS
+
+def getProfessorFromClass(classId):
+    professor2class = models.Teach.query.filter_by(cl_id=classId).all()
+    if professor2class is None:
+        return None, NO_CLASS
+
+    professor = models.Professors.query.get(professor2class[0].pr_id)
+    if professor is None:
+        return None, NO_PROFESSOR
+    return professor, SUCCESS
+
+def getSectionDetails(sectionID):
+    pass
+
+def getProfDetails(professorID):
+    pass
 
 def createNewSchedule():
     pass
