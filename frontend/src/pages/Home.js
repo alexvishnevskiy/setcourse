@@ -1,4 +1,4 @@
-import Button from '../Button';
+import Button from '../components/Button';
 import Calendar from '../components/Calendar';
 import Header from '../components/Header'; 
 import Sidebar from '../components/Sidebar'; 
