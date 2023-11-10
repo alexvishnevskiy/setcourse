@@ -5,7 +5,8 @@ function Login() {
         <div className="right m-2 p-0 d-flex flex-column" style={{flex: 1}}>
           <div className="header m-0 mt-2 p-0 px-2 d-flex justify-content-between align-items-center">
             <p className="m-0 p-0 text-white">setCourse</p>
-            <p className="m-0 p-0 text-white">logo</p>
+            {/* <p className="m-0 p-0 text-white">logo</p> */}
+            <img src='/sclogo.svg' alt='' style={{height:'50px', width:'50px'}}/>
           </div>
           <div className="wrapper d-flex flex-column justify-content-center align-items-center" style={{flex: 1}}>
             <div className="welcome m-0 mb-5 p-0 d-flex flex-column justify-content-center align-items-center">

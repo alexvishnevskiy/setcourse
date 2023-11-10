@@ -1,4 +1,4 @@
-import Button from '../Button';
+import Button from '../components/Button';
 import CourseList from '../components/CourseList';
 import Header from '../components/Header'; 
 import SearchBar from '../components/SearchBar';
