@@ -1,0 +1,19 @@
+button, input {
+    font-size: 14px;
+}
+
+input {
+    padding-top: 2.5px;
+    padding-bottom: 2.5px;
+    flex: 10; 
+    border: 1px solid lightgray; 
+}
+
+input:focus {
+    outline: none !important; 
+    border: 1px solid rgb(80, 135, 236) !important; 
+}
+
+button {
+    flex: 1; 
+}

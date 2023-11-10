@@ -5,7 +5,6 @@ from app.constants import *
 from app.controller import *
 from http import HTTPStatus
 
-
 @app.route('/login')
 def login():
     return 
