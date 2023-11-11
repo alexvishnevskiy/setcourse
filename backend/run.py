@@ -4,6 +4,9 @@ from flask import Flask, jsonify, request
 from app.constants import *
 from app.controller import *
 from http import HTTPStatus
+# from flask_cors import CORS
+
+# CORS(app, resources={r"/class/info/*": {"origins": "http://127.0.0.1:3000"}})
 
 @app.route('/login')
 def login():
@@ -36,10 +39,13 @@ def list_all_classes_for_schedule(schedule_id):
     else:
         return {}, HTTPStatus.INTERNAL_SERVER_ERROR
 
-@app.route('/class/info/get/<int:class_id>', methods=['GET'])
+@app.route('/class/info/get/<int:class_id>', methods=["GET", "OPTIONS"])
 def get_class_info(class_id):
     info, status = class_info(class_id)
-    return jsonify(info), status
+    # return jsonify(info), status
+    response = jsonify(info)
+    
+    return response
 
 # @app.route('/courses/delete/<int:schedule_id>/<int:class_id>', methods=['DELETE'])
 # def delete_course(schedule_id, class_id):

@@ -22,7 +22,20 @@ function Search() {
 
     useEffect(() => {
         //send request to get all classes for current term 
-        console.log("Request send for all classes");
+        // console.log("Request send for all classes");
+        fetch('http://127.0.0.1:8080/class/info/get/1')
+        .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json(); 
+        })
+        .then(data => {
+            console.log(data);
+        })
+        .catch(()=> {
+            console.log("an error happened"); 
+        })
     }, []);
 
     const onSearch = () => {

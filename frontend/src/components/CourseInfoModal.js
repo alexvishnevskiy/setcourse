@@ -1,3 +1,5 @@
+import DeleteCourseModalCSS from './DeleteCourseModal.module.css';
+
 function CourseInfoModal({ courseInfo, btnInfo} ) { 
     console.log(courseInfo); 
     const labelStyle = {
@@ -5,8 +7,8 @@ function CourseInfoModal({ courseInfo, btnInfo} ) {
     }
     return (
         <>
-            <div className='backdrop h-100 w-100 position-absolute bg-dark'></div>
-            <div style={{height: '400px', width: '700px'}} className="wrapper m-0 p-3 position-absolute top-50 start-50 translate-middle rounded-3 bg-dark d-flex flex-column justify-content-between">
+            <div className={`${DeleteCourseModalCSS.backdrop} h-100 w-100 position-absolute bg-dark`}></div>
+            <div style={{height: '400px', width: '700px'}} className={`${DeleteCourseModalCSS.wrapper} m-0 p-3 position-absolute top-50 start-50 translate-middle rounded-3 bg-dark d-flex flex-column justify-content-between`}>
                 <div className="info-wrapper text-white overflow-auto" style={{'fontSize': '15px'}}>
                     <div className='row m-0 mb-3 p-0'>
                         <p className="col-3 m-0 p-0" style={labelStyle}>Title</p>
@@ -40,7 +42,7 @@ function CourseInfoModal({ courseInfo, btnInfo} ) {
                 <div className="m-0 p-0 d-flex gap-2">
                 {
                     btnInfo.map((info) => {
-                        return <button key={info.id} className="rounded border-0" onClick={() => {info.clickHandler(courseInfo.id)}}>{info.btnText}</button>
+                        return <button key={info.id} className={`${DeleteCourseModalCSS.modalButton} rounded border-0`} onClick={() => {info.clickHandler(courseInfo.id)}}>{info.btnText}</button>
                     })
                 }
                 </div>
