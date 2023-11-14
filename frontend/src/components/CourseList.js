@@ -8,10 +8,10 @@ const checkIfTimingOverlap = (startTime, endTime, courses) => {
         const targetStart = startTime.getTime(); 
         const targetEnd = endTime.getTime(); 
         if(startInterval <= targetEnd && targetEnd <= endInterval || targetStart <= endInterval && endInterval <= targetEnd){
-          return <AiFillQuestionCircle size={20} style={{color: '#dc3545'}}/> 
+          return <AiFillQuestionCircle size={25} style={{color: '#dc3545'}}/> 
         }
       }
-      return <FcPlus size={20} />;
+      return <FcPlus size={25} />;
 }
 
 function CourseList({ courses, result, handleShowCourseInfo, onAddCourse }) {

@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchBarCSS from './SearchBar.module.css'; 
+import { BiSearch } from 'react-icons/bi';
 
 function SearchBar({ setSearchQuery, searchQuery, onSearch }) {
   return (
@@ -16,7 +17,7 @@ function SearchBar({ setSearchQuery, searchQuery, onSearch }) {
           }
         }}
       />
-      <button onClick={() => onSearch()} className={`border-0 rounded-2 ${SearchBarCSS.button}`}>Search</button>
+      <button onClick={() => onSearch()} className={`border-0 rounded-2 ${SearchBarCSS.button}`} >Search  {<BiSearch />}</button>
     
     </div>
   );
