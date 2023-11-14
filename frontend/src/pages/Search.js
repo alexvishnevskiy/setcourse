@@ -178,11 +178,13 @@ function Search({courses, setCourses}) {
                         setOpenCourseInfoModal(prevState => !prevState);
                     }, 
                     btnText: 'Close', 
+                    backColor: '',
                     id: 1
                 }, 
                 {
                     clickHandler: onAddCourse, 
                     btnText: 'Add Course', 
+                    backColor: '#44DB56',
                     id: 2
                 }
             ]}/>}

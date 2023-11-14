@@ -41,7 +41,9 @@ function CourseInfoModal({ courseInfo, btnInfo} ) {
                 <div className="m-0 p-0 d-flex gap-2">
                 {
                     btnInfo.map((info) => {
-                        return <button key={info.id} className={`${DeleteCourseModalCSS.modalButton} rounded border-0`} onClick={() => {info.clickHandler(courseInfo.id)}}>{info.btnText}</button>
+                        return <button key={info.id} className={`${DeleteCourseModalCSS.modalButton} rounded border-0`} style={{
+                            background: info.backColor
+                        }} onClick={() => {info.clickHandler(courseInfo.id)}}>{info.btnText}</button>
                     })
                 }
                 </div>
