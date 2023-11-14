@@ -1,6 +1,13 @@
 from app.repository import *
 from app.constants import *
+import random
 
+
+# internal function to split start and end times
+def _split_time(time: str):
+    start_time = time.split('-')[0].strip()
+    end_time = time.split('-')[1].strip()
+    return start_time, end_time
 
 def add_class2schedule(scheduleID, classID):
     class_, status = getClass(classID)
@@ -55,8 +62,7 @@ def list_classes_from_schedule(scheduleID):
         if status != SUCCESS:
             return [], status
 
-        start_time = class_.time.split('-')[0]
-        end_time = class_.time.split('-')[1]
+        start_time, end_time = _split_time(class_.time)
         all_classes.append(
             {
                 'days': class_.days,
@@ -84,9 +90,7 @@ def class_info(classID):
     if status != SUCCESS:
         return {}, status
 
-    start_time = class_info.time.split('-')[0]
-    end_time = class_info.time.split('-')[1]
-    
+    start_time, end_time = _split_time(class_info.time)
     return {
         'title': course_info.title,
         'units': course_info.units,
@@ -99,4 +103,29 @@ def class_info(classID):
         'location': class_info.location,
         'course_id': course_info.c_id
     }, SUCCESS
+
+# Get all the classes in the database
+def get_all_classes(search_query=None, core_req=None, days=None):
+    classes, status = getAllClasses(search_query, core_req, days)
+    if status != SUCCESS:
+        return [], status
+
+    all_classes = []
+    for class_ in classes:
+        start_time, end_time = _split_time(class_.time)
+        all_classes.append({
+            'title': class_.course.title,
+            'name': class_.course.name,
+            'professor': "",
+            'start': start_time,
+            'end': end_time,
+            'seats': random.randint(2, 10), # TODO: redo this
+            'course_id': class_.course.c_id
+        })
+    return all_classes, SUCCESS
+
+# Delete course given schedule_id and course_id
+def delete_course_from_schedule(scheduleID, classID):
+    status = deleteCourseFromSchedule(scheduleID, classID)
+    return status
 

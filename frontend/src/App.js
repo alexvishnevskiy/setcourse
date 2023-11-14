@@ -16,7 +16,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<Home courses={courses} setCourses={setCourses}/>} />
-          <Route path='/search' element={<Search />} />
+          <Route path='/search' element={<Search courses={courses} setCourses={setCourses}/>} />
           <Route path='/login' element={<Login />} />
         </Routes>
       </BrowserRouter>

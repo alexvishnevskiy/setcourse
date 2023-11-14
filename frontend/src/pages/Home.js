@@ -69,13 +69,13 @@ function Home({ courses, setCourses }) {
         viewType: "Resources",
         startDate: "2023-11-02", 
         columns: [
-            {name: "mon", id: "MON"},  
-            {name: "tue", id: "TUE"},  
-            {name: "wed", id: "WED"},  
-            {name: "thu", id: "THU"},  
-            {name: "fri", id: "FRI"},  
-            {name: "sat", id: "SAT"},  
-            {name: "sun", id: "SUN"},  
+            {name: "mon", id: "M"},  
+            {name: "tue", id: "T"},  
+            {name: "wed", id: "W"},  
+            {name: "thu", id: "TH"},  
+            {name: "fri", id: "F"},  
+            {name: "sat", id: "SA"},  
+            {name: "sun", id: "SU"},  
         ],  
         timeRangeSelectedHandling: "Disabled",
         eventMoveHandling: "Disabled",
@@ -104,7 +104,7 @@ function Home({ courses, setCourses }) {
             setCourses({
                 events: [
                     {
-                        "resource": "MON",
+                        "resource": "M/W/F",
                         "start": "2023-11-02T14:15:00",
                         "end": "2023-11-02T15:20:00",
                         "text": "COEN 177\n2:15-3:20", 
@@ -112,34 +112,10 @@ function Home({ courses, setCourses }) {
                         "id": 1, 
                     },
                     {
-                        "resource": "TUE",
+                        "resource": "T/TH",
                         "start": "2023-11-02T16:15:00",
                         "end": "2023-11-02T17:23:00",
                         "text": "MUSC 7\n4:15-5:23",
-                        "title": "MUSC 7",
-                        "id": 2, 
-                    },
-                    {
-                        "resource": "WED",
-                        "start": "2023-11-02T14:15:00",
-                        "end": "2023-11-02T15:20:00",
-                        "text": "COEN 177\n2:15-3:20", 
-                        "title": "COEN 177",
-                        "id": 1, 
-                    },
-                    {
-                        "resource": "FRI",
-                        "start": "2023-11-02T14:15:00",
-                        "end": "2023-11-02T15:20:00",
-                        "text": "COEN 177\n2:15-3:20", 
-                        "title": "COEN 177",
-                        "id": 1, 
-                    },
-                    {
-                        "resource": "THU",
-                        "start": "2023-11-02T16:15:00",
-                        "end": "2023-11-02T17:23:00",
-                        "text": "MUSC 7\n4:15-5:23", 
                         "title": "MUSC 7",
                         "id": 2, 
                     },
@@ -147,6 +123,22 @@ function Home({ courses, setCourses }) {
             });
         }, 1000);
     }, []); 
+
+    const convertCoursesToCalendarFormat = (coursesList) => {
+        if(coursesList.length <= 0) return coursesList; 
+        const classesFormatted = {
+            events: []
+        }
+        for(let i = 0; i < coursesList.length; i++){
+            const daysOffered = coursesList[i].resource.split('/');
+            for(let day of daysOffered){
+                let newClass = { ...coursesList[i] };
+                newClass.resource = day;
+                classesFormatted.events.push(newClass);
+            }
+        }
+        return classesFormatted;
+    }
 
     return (
       <div className="vh-100 d-flex flex-column position-relative" style={{backgroundColor: "#F2EDFF", backgroundImage: "url('/homeBackground.png')", backgroundPosition: "right bottom", backgroundRepeat: "no-repeat"}}>
@@ -170,7 +162,7 @@ function Home({ courses, setCourses }) {
                     </Link>
                 </div>
                 <div className="calendar m-0 p-0" style={{flex: 1}}>
-                    <Calendar config={config} courses={courses}/>
+                    <Calendar config={config} courses={convertCoursesToCalendarFormat(structuredClone(courses.events))}/>
                 </div>
             </div>
         </div>

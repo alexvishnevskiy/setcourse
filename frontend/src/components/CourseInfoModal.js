@@ -1,7 +1,6 @@
 import DeleteCourseModalCSS from './DeleteCourseModal.module.css';
 
 function CourseInfoModal({ courseInfo, btnInfo} ) { 
-    console.log(courseInfo); 
     const labelStyle = {
         color: '#9e9d9d'
     }
@@ -32,7 +31,7 @@ function CourseInfoModal({ courseInfo, btnInfo} ) {
                     </div>
                     <div className='row m-0 mb-3 p-0'>
                         <p className="col-3 m-0 p-0" style={labelStyle}>Time</p>
-                        <p className="col m-0 p-0">{ courseInfo.time}</p>
+                        <p className="col m-0 p-0">{ courseInfo.start} - {courseInfo.end}</p>
                     </div>
                     <div className='row m-0 mb-3 p-0'>
                         <p className="col-3 m-0 p-0" style={labelStyle}>Location</p>
