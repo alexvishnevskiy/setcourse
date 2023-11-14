@@ -16,7 +16,7 @@ function CourseList({ result, handleShowCourseInfo }) {
         <div className="d-flex align-items-center gap-3">
             <p className="m-0 p-0">{result.professor}</p>
             <div className="m-0 p-1 rounded-1 d-flex justify-content-center align-items-center" style={{cursor: 'pointer'}} onClick={() => {handleShowCourseInfo(result.id)}}>
-              <FcPlus size={20} /> 
+              <FcPlus size={30} /> 
             </div>
         </div>
       </div>

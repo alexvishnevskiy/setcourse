@@ -83,7 +83,7 @@ function Search() {
                     'description': 'Introduction to computer operating systems. Operating system concepts, computer organization model, storage hierarchy, operating system organization, processes management, interprocess communication and synchronization, memory management and virtual memory, I/O subsystems, and file systems. Design, implementation, and performance issues.',
                     'professor': 'Ahmed Amer', 
                     'time': '11AM - 12:05PM', 
-                    'location': "O'Conner 207", 
+                    'location': "O'Connor 207", 
                     'id': 10
                 }); 
             }, 1000);
@@ -110,7 +110,10 @@ function Search() {
     return (
         <div className="site-container d-flex flex-column position-relative" style={{
             height: '100vh',
-            backgroundColor: "#D9FFE1"
+            backgroundColor: "#D9FFE1",
+            backgroundImage: "url('/searchBackground.png')", 
+            backgroundPosition: "right bottom", 
+            backgroundRepeat: "no-repeat"
         }}>
             {openCourseInfoModal && <CourseInfoModal courseInfo={courseInfo} btnInfo={[
                 {

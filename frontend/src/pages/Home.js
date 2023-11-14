@@ -149,7 +149,7 @@ function Home({ courses, setCourses }) {
     }, []); 
 
     return (
-      <div className="vh-100 d-flex flex-column position-relative" style={{backgroundColor: "#F2EDFF"}}>
+      <div className="vh-100 d-flex flex-column position-relative" style={{backgroundColor: "#F2EDFF", backgroundImage: "url('/homeBackground.png')", backgroundPosition: "right bottom", backgroundRepeat: "no-repeat"}}>
         {openDeleteModal && <DeleteCourseModal setOpenDeleteModal={setOpenDeleteModal} onConfirmDelete={onConfirmDelete} itemToDelete={itemToDelete}/>}
         {openCourseInfoModal && <CourseInfoModal courseInfo={courseInfo} btnInfo={[
             {
