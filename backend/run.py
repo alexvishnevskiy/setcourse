@@ -5,9 +5,9 @@ from flask_cors import cross_origin
 from app.constants import *
 from app.controller import *
 from http import HTTPStatus
-# from flask_cors import CORS
+from flask_cors import CORS
 
-# CORS(app, resources={r"/class/info/*": {"origins": "http://127.0.0.1:3000"}})
+CORS(app, resources={r"/class/info/*": {"origins": "http://127.0.0.1:3000"}})
 
 @app.route('/login')
 @cross_origin(supports_credentials=True)
