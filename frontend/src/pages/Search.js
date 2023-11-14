@@ -136,7 +136,7 @@ function Search({courses, setCourses}) {
             const endInterval = new Date(courses.events[i].end).getTime();
             const targetStart = new Date("2023-11-02" + fetchedClass.start).getTime();
             const targetEnd = new Date("2023-11-02" + fetchedClass.end).getTime();
-            if(startInterval <= targetEnd && targetEnd <= endInterval || targetStart <= endInterval && endInterval <= targetEnd){
+            if((startInterval <= targetEnd && targetEnd <= endInterval) || (targetStart <= endInterval && endInterval <= targetEnd)){
                 classConflicts.push(courses.events[i].title);
             }
         }

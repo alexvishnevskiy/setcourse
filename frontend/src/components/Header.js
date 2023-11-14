@@ -9,9 +9,13 @@ function Header() {
             <img src='/sclogo.svg' alt='' style={{height:'25px', width:'25px'}}/>
             <p className="m-0 ms-2 p-0">setCourse</p>
         </Link>
-        <div className="right ">
-            <p className="m-0 p-0">profile image</p>
-        </div>
+        <Link to="/login" className="left m-0 p-0 d-flex align-items-center text-reset" style={{
+                        textDecoration: 'none'
+                    }}>
+          <div className="right ">
+              <p className="m-0 p-0">profile image</p>
+          </div>
+        </Link>
       </div>
     
     );

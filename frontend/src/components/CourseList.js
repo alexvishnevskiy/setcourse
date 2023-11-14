@@ -7,7 +7,7 @@ const checkIfTimingOverlap = (startTime, endTime, courses) => {
         const endInterval = new Date(courses.events[i].end).getTime();
         const targetStart = startTime.getTime(); 
         const targetEnd = endTime.getTime(); 
-        if(startInterval <= targetEnd && targetEnd <= endInterval || targetStart <= endInterval && endInterval <= targetEnd){
+        if((startInterval <= targetEnd && targetEnd <= endInterval) || (targetStart <= endInterval && endInterval <= targetEnd)){
           return <AiFillQuestionCircle size={20} style={{color: '#dc3545'}}/> 
         }
       }
