@@ -1,6 +1,7 @@
 from app import db, models
 from app.constants import *
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import or_
 
 
 def addClassToSchedule(scheduleID, classID):
@@ -68,26 +69,32 @@ def getProfessorFromClass(classId):
         return None, NO_PROFESSOR
     return professor, SUCCESS
 
-def getSectionDetails(sectionID):
-    pass
+def getAllClasses(search_query=None, core_req=None, days=None):
+    # get all classes with or without filters
+    classesWithDetails = models.Classes.query.join(models.Course)
 
-def getProfDetails(professorID):
-    pass
+    if core_req is not None:
+        classesWithDetails = classesWithDetails.filter(models.Course.co_reqs == core_req)
+    if days is not None:
+        classesWithDetails = classesWithDetails.filter(models.Classes.days == days)
+    if search_query is not None:
+        classesWithDetails = classesWithDetails.filter(
+            or_(
+                models.Course.name.op('REGEXP')(f"{search_query}*"),
+                models.Course.title.op('REGEXP')(f"{search_query}*")
+            )
+        )
+    classesWithDetails = classesWithDetails.all()
 
-def createNewSchedule():
-    pass
+    if classesWithDetails is None:
+        return None, NO_CLASS
+    return classesWithDetails, SUCCESS
 
-def addSection(sectionID):
-    pass
-
-def addReview(quality, difficulty, description, sectionID):
-    pass
-
-def deleteSchedule(scheduleID):
-    pass
-
-def deleteSection(sectionID, scheduleID):
-    pass
-
-def sectionTaken(sectionID):
-    pass
+def deleteCourseFromSchedule(scheduleId, classId):
+    entry_to_delete = models.Schedule2Class.query.filter_by(cl_id=classId, sch_id=scheduleId).first()
+    if entry_to_delete:
+        db.session.delete(entry_to_delete)
+        db.session.commit()
+        return SUCCESS
+    else:
+        return NO_SCHEDULE_OR_CLASS

@@ -3,7 +3,6 @@ version: '3'
 services:
   mysql:
     image: mysql
-    container_name: mysql-setcourse
     environment:
       MYSQL_ROOT_PASSWORD: alex
       MYSQL_USER: alex
@@ -13,4 +12,29 @@ services:
       - "3306:3306"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init-db.sql
+    # networks:
+    #   - setcourse
 
+  # backend:
+  #   restart: always
+  #   build: 
+  #     context: './backend'
+  #   networks:
+  #     - setcourse
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - mysql
+
+  # frontend:
+  #   restart: always
+  #   build: 
+  #     context: './frontend'
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - setcourse
+
+# networks:
+#   setcourse:
+#     driver: bridge
