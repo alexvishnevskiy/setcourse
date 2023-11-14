@@ -96,7 +96,8 @@ function Search() {
 
     return (
         <div className="site-container d-flex flex-column position-relative" style={{
-            height: '100vh'
+            height: '100vh',
+            backgroundColor: "#D9FFE1"
         }}>
             {openCourseInfoModal && <CourseInfoModal courseInfo={courseInfo} btnInfo={[
                 {
@@ -127,7 +128,7 @@ function Search() {
                             <Link to="/" className="text-reset m-0 p-0 w-auto d-flex gap-2" style={{
                                 textDecoration: 'none'
                             }}>
-                                <Button text="Schedule" icon={<BiCalendar />} color={"#EAEAEA"} />
+                                <Button text="View Schedule" icon={<BiCalendar />} color={"#67B0F0"} />
                             </Link> 
                         </div>
                         <SearchBar setSearchQuery={setSearchQuery} searchQuery={searchQuery} onSearch={onSearch}/> 

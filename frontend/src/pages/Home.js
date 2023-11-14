@@ -149,7 +149,7 @@ function Home({ courses, setCourses }) {
     }, []); 
 
     return (
-      <div className="vh-100 d-flex flex-column position-relative">
+      <div className="vh-100 d-flex flex-column position-relative" style={{backgroundColor: "#F2EDFF"}}>
         {openDeleteModal && <DeleteCourseModal setOpenDeleteModal={setOpenDeleteModal} onConfirmDelete={onConfirmDelete} itemToDelete={itemToDelete}/>}
         {openCourseInfoModal && <CourseInfoModal courseInfo={courseInfo} btnInfo={[
             {
@@ -166,7 +166,7 @@ function Home({ courses, setCourses }) {
                     <Link to="/search" className="text-reset m-0 p-0 w-auto d-flex gap-2" style={{
                         textDecoration: 'none'
                     }}>
-                        <Button text="Add Course" icon={<BiPlus />} color={"#EAEAEA"} />
+                        <Button text="Add Course" icon={<BiPlus />} color={"#44DB56"} />
                     </Link>
                 </div>
                 <div className="calendar m-0 p-0" style={{flex: 1}}>
