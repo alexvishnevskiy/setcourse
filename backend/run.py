@@ -1,15 +1,18 @@
 import os
 from app import app
 from flask import Flask, jsonify, request
+from flask_cors import cross_origin
 from app.constants import *
 from app.controller import *
 from http import HTTPStatus
 
 @app.route('/login')
+@cross_origin(supports_credentials=True)
 def login():
     return 
 
 @app.route('/courses/add/<int:schedule_id>/<int:class_id>', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def add_course(schedule_id, class_id):
     # add course to specific scheduler
     status = add_class2schedule(schedule_id, class_id)
@@ -28,6 +31,7 @@ def add_course(schedule_id, class_id):
         return jsonify({"message": f"Internal error"}), HTTPStatus.INTERNAL_SERVER_ERROR
 
 @app.route('/schedule/classes/get/<int:schedule_id>', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def list_all_classes_for_schedule(schedule_id):
     # list all classes in the given schedule
     classes, status = list_classes_from_schedule(schedule_id)
@@ -37,44 +41,33 @@ def list_all_classes_for_schedule(schedule_id):
         return {}, HTTPStatus.INTERNAL_SERVER_ERROR
 
 @app.route('/class/info/get/<int:class_id>', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def get_class_info(class_id):
     info, status = class_info(class_id)
-    return jsonify(info), status
+    if status != SUCCESS:
+        return {}, HTTPStatus.INTERNAL_SERVER_ERROR
+    return jsonify(info), HTTPStatus.OK
 
-# @app.route('/courses/delete/<int:schedule_id>/<int:class_id>', methods=['DELETE'])
-# def delete_course(schedule_id, class_id):
-#     # delete course from specific scheduler
-#     return
 
-# @app.route('/reviews/add/<int:professor_id>/<int:class_id>', methods=['POST'])
-# def add_review():
-#     # add review
-#     return
+@app.route('/class/all/get', methods=['GET'])
+@cross_origin(supports_credentials=True)
+def all_classes():
+    search_query = request.args.get('search_query', default=None, type=str)
+    core_req = request.args.get('core_req', default=None, type=str)
+    days = request.args.get('days', default=None, type=str)
 
-# @app.route('/reviews/delete/<int:professor_id>/<int:class_id>', methods=['DELETE'])
-# def delete_review():
-#     # delete review
-#     return
+    all_classes, status = get_all_classes(search_query, core_req, days)
+    if status != SUCCESS: 
+        return {}, HTTPStatus.INTERNAL_SERVER_ERROR
+    return jsonify(all_classes), HTTPStatus.OK
 
-# @app.route('/schedule/create/<int:user_id>/<str:term>', methods=['POST'])
-# def create_schedule():
-#     # create schedule
-#     return
-
-# @app.route('/schedule/delete/<int:user_id>/<str:term>', methods=['DELETE'])
-# def delete_schedule():
-#     # delete schedule
-#     return
-
-# @app.route('/schedule/get/<int:user_id>', methods=['GET'])
-# def list_all_schedules():
-#     # list all schedules for specific user
-#     return
-
-# @app.route('/reviews/get/<int:professor_id>/<int:class_id>', methods=['GET'])
-# def list_all_reviews():
-#     # list all reviews
-#     return
+@app.route('/schedule/delete/<int:schedule_id>/<int:class_id>', methods=['DELETE'])
+@cross_origin(supports_credentials=True)
+def delete_class_from_schedule(schedule_id, class_id):
+    status = delete_course_from_schedule(schedule_id, class_id)
+    if status != SUCCESS:
+        return jsonify(status), HTTPStatus.INTERNAL_SERVER_ERROR
+    return jsonify(status), HTTPStatus.OK
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))    
