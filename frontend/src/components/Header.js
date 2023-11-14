@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 function Header() {
     return (
-      <div className="m-0 mx-2 p-0 py-3 px-3 d-flex justify-content-between align-items-center border-bottom" style={{flex: 0}}>
+      <div className="m-0 mx-0 p-0 py-3 px-3 d-flex justify-content-between align-items-center border-bottom" style={{flex: 0, backgroundColor: '#FF8080'}}>
         <Link to="/" className="left m-0 p-0 d-flex align-items-center text-reset" style={{
                         textDecoration: 'none'
                     }}>

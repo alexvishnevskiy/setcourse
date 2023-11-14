@@ -17,6 +17,7 @@ function SearchBar({ setSearchQuery, searchQuery, onSearch }) {
         }}
       />
       <button onClick={() => onSearch()} className={`border-0 rounded-2 ${SearchBarCSS.button}`}>Search</button>
+    
     </div>
   );
 }
