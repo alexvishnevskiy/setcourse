@@ -1,4 +1,4 @@
-button {
+.modalButton {
     flex: 1;
     cursor: pointer; 
 }

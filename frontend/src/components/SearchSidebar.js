@@ -1,5 +1,6 @@
 import React from 'react'
 import Select from 'react-select'
+import "./Sidebar.css"
 
 const coreReqs = [
   { value: 'art', label: 'Art' },
@@ -20,10 +21,10 @@ const days = [
 function SearchSidebar() {
     return (
         <div className="sidebar m-0 p-2 col-2 rounded-2">
-          <p className="m-0 mt-1 mb-2 p-0 fw-bold text-light" style={{fontSize: '24px'}}>Filters</p>
+          <p className="m-0 mt-1 mb-2 p-0 fw-bold text-light">Filters</p>
           <div className='d-flex flex-column gap-2'>
             <div>
-              <p className="m-0 mt-1 mb-1 p-0 fw-bold" style={{color: 'rgb(193,164,210)'}}>Core Reqs</p>
+              <p className="m-0 mt-1 mb-1 p-0 fw-bold input-label">Core Requirements</p>
               <Select
                 isMulti
                 name="colors"
@@ -33,7 +34,7 @@ function SearchSidebar() {
               />
             </div>
             <div>
-              <p className="m-0 mt-1 mb-1 p-0 fw-bold" style={{color: 'rgb(193,164,210)'}}>Day</p>
+              <p className="m-0 mt-1 mb-1 p-0 fw-bold input-label">Day</p>
               <Select
                 isMulti
                 name="colors"
