@@ -18,7 +18,7 @@ const days = [
   { value: 'sunday', label: 'Sunday' },
 ]
 
-function SearchSidebar() {
+function SearchSidebar({setCoreReqs, setDays}) {
     return (
         <div className="sidebar m-0 p-2 col-2 rounded-2">
           <p className="m-0 mt-1 mb-2 p-0 fw-bold text-light">Filters</p>
@@ -31,6 +31,9 @@ function SearchSidebar() {
                 options={coreReqs}
                 className="basic-multi-select"
                 classNamePrefix="select"
+                onChange={(val) => {
+                  setCoreReqs(val)
+                }}
               />
             </div>
             <div>
@@ -41,6 +44,9 @@ function SearchSidebar() {
                 options={days}
                 className="basic-multi-select"
                 classNamePrefix="select"
+                onChange={(val) => {
+                  setDays(val)
+                }}
               />
             </div>
           </div>

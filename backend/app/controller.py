@@ -68,8 +68,8 @@ def list_classes_from_schedule(scheduleID):
                 'days': class_.days,
                 'start': start_time, #TODO: change later
                 'end': end_time,
-                'title': course_.name,
-                'course_id': course_.c_id
+                'title': course_.title,
+                'class_id': class_.cl_id
             }
         )
     return all_classes, SUCCESS
@@ -101,7 +101,8 @@ def class_info(classID):
         'start': start_time,
         'end': end_time,
         'location': class_info.location,
-        'course_id': course_info.c_id
+        'class_id': class_info.cl_id,
+        'days': class_info.days
     }, SUCCESS
 
 # Get all the classes in the database
@@ -120,7 +121,7 @@ def get_all_classes(search_query=None, core_req=None, days=None):
             'start': start_time,
             'end': end_time,
             'seats': random.randint(2, 10), # TODO: redo this
-            'course_id': class_.course.c_id,
+            'class_id': class_.cl_id,
             'days': class_.days
         })
     return all_classes, SUCCESS

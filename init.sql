@@ -76,7 +76,6 @@ INSERT  INTO user (first_name, last_name) VALUES ('Alice', 'Smith');
 INSERT  INTO user (first_name, last_name) VALUES ('Bob', 'Johnson');
 
 -- Schedule 
-INSERT  INTO schedule (user_id, term) VALUES (1, 'Winter');
 INSERT  INTO schedule (user_id, term) VALUES (1, 'Fall');
 INSERT  INTO schedule (user_id, term) VALUES (2, 'Fall');
 
@@ -105,10 +104,11 @@ INSERT INTO teach (pr_id, cl_id) VALUES (1, 1);
 INSERT INTO teach (pr_id, cl_id) VALUES (1, 3);
 INSERT INTO teach (pr_id, cl_id) VALUES (2, 2);
 INSERT INTO teach (pr_id, cl_id) VALUES (3, 3);
+INSERT INTO teach (pr_id, cl_id) VALUES (3, 4);
 
 -- Schedule2class
 INSERT INTO schedule2class(cl_id, sch_id) VALUES (1, 1);
-INSERT INTO schedule2class(cl_id, sch_id) VALUES (2, 1);
-INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 1);
+-- INSERT INTO schedule2class(cl_id, sch_id) VALUES (2, 1);
+-- INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 1);
 INSERT INTO schedule2class(cl_id, sch_id) VALUES (4, 2);
 INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 2);

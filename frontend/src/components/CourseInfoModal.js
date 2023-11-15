@@ -1,6 +1,7 @@
 import DeleteCourseModalCSS from './DeleteCourseModal.module.css';
 
 function CourseInfoModal({ courseInfo, btnInfo} ) { 
+    console.log('course info:', courseInfo); 
     const labelStyle = {
         color: '#9e9d9d'
     }
@@ -43,7 +44,7 @@ function CourseInfoModal({ courseInfo, btnInfo} ) {
                     btnInfo.map((info) => {
                         return <button key={info.id} className={`${DeleteCourseModalCSS.modalButton} rounded border-0`} style={{
                             background: info.backColor
-                        }} onClick={() => {info.clickHandler(courseInfo.id)}}>{info.btnText}</button>
+                        }} onClick={() => {info.clickHandler(courseInfo['class_id'])}}>{info.btnText}</button>
                     })
                 }
                 </div>

@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
 import CourseInfoModal from '../components/CourseInfoModal';
 
-function Home({ courses, setCourses }) {
+function Home({ courses, setCourses, scheduleID}) {
     const [openDeleteModal, setOpenDeleteModal] = useState(false); 
     const [itemToDelete, setItemToDelete] = useState(undefined); 
 
@@ -92,37 +92,45 @@ function Home({ courses, setCourses }) {
         },
     };
 
-    useEffect(() => {
-        //make a call to the API to get all the classes in the users schedule
-        //Using the validated user from the login page (you have their unique ID)
-        //With their unique ID get the schedule ID that is saved in the database 
-        //With the Schedule ID (save this in a state?) send a request to the database for their schedule
-        //Once you have received their schedule, update the state (which will update the UI)
+    function formatTimeString(dateTimeString) {
+        const options = { hour: 'numeric', minute: 'numeric' };
+        const formattedTime = new Date(dateTimeString).toLocaleTimeString([], options);
+        return formattedTime.split(" ")[0];
+    } 
 
-        //simulating query
-        setTimeout(() => {
+    //Runs on page load: gets users classes in their schedule & gets all the classes in the database
+    useEffect(() => {
+        //get users courses
+        fetch(`http://127.0.0.1:8080/schedule/classes/get/${scheduleID}`)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((classes) => {
+            const classesArr = [];
+            for(let singleClass of classes){
+                const startTime = formatTimeString(`2023-11-02T${singleClass.start}:00`);
+                const endTime = formatTimeString(`2023-11-02T${singleClass.end}:00`);
+                const classObj = {
+                    'resource': singleClass.days,
+                    'start': `2023-11-02T${singleClass.start}:00`,
+                    'end': `2023-11-02T${singleClass.end}:00`,
+                    'text': `${singleClass.title}\n${startTime}-${endTime}`,
+                    'title': singleClass.title,
+                    'id': singleClass.class_id
+                }
+                classesArr.push(classObj);
+            }
             setCourses({
-                events: [
-                    {
-                        "resource": "M/W/F",
-                        "start": "2023-11-02T14:15:00",
-                        "end": "2023-11-02T15:20:00",
-                        "text": "COEN 177\n2:15-3:20", 
-                        "title": "COEN 177",
-                        "id": 1, 
-                    },
-                    {
-                        "resource": "T/TH",
-                        "start": "2023-11-02T16:15:00",
-                        "end": "2023-11-02T17:23:00",
-                        "text": "MUSC 7\n4:15-5:23",
-                        "title": "MUSC 7",
-                        "id": 2, 
-                    },
-                ]
-            });
-        }, 1000);
-    }, []); 
+                events: classesArr
+            })
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+    }, []);
 
     const convertCoursesToCalendarFormat = (coursesList) => {
         if(coursesList.length <= 0) return coursesList; 
