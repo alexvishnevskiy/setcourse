@@ -85,10 +85,10 @@ INSERT  INTO course (title, co_reqs, name, units) VALUES ('CSCI 180', 'CSCI 180 
 INSERT  INTO course (title, co_reqs, name, units) VALUES ('SOCI 143', 'SOCI 143 L', 'Sociology', 5);
 
 -- Classes
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:00 - 11:30', 'Fall', 'MWF', 'Class A ...', 'O Connor 207', 1);
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:00 - 11:30', 'Winter', 'TTh', 'Class B ...', 'O Connor 208', 1);
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:00 - 11:30', 'Spring', 'MF', 'Class C ...', 'O Connor 209', 2);
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:00 - 11:30', 'Summer', 'MWF', 'Class D ...', 'O Connor 210', 2);
+INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('14:00 - 15:30', 'Fall', 'M/W/F', 'Class A ...', 'O Connor 207', 1);
+INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:00 - 11:30', 'Fall', 'T/TH', 'Class B ...', 'O Connor 208', 1);
+INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:00 - 11:30', 'Fall', 'M/F', 'Class C ...', 'O Connor 209', 2);
+INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:00 - 11:30', 'Fall', 'M/W/F', 'Class D ...', 'O Connor 210', 2);
 
 -- Professors
 INSERT  INTO professors (first_name, last_name) VALUES ('John', 'Doe');

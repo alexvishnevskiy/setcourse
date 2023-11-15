@@ -25,6 +25,7 @@ function CourseList({ courses, result, handleShowCourseInfo, onAddCourse }) {
         <div className="d-flex flex-column gap-1">
             <p className="m-0 p-0">{result.title} - {result.name}</p>
             <div className="d-flex align-items-center gap-3">
+                <p className="m-0 p-0">{result.days}</p>
                 <p className="m-0 p-0">{result.start} - {result.end}</p>
                 <p className="m-0 p-0 text-success">{result.seats} Seats Open</p>
             </div>

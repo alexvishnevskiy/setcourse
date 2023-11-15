@@ -116,11 +116,12 @@ def get_all_classes(search_query=None, core_req=None, days=None):
         all_classes.append({
             'title': class_.course.title,
             'name': class_.course.name,
-            'professor': "",
+            'professor': "Natalie Linnell",
             'start': start_time,
             'end': end_time,
             'seats': random.randint(2, 10), # TODO: redo this
-            'course_id': class_.course.c_id
+            'course_id': class_.course.c_id,
+            'days': class_.days
         })
     return all_classes, SUCCESS
 

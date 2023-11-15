@@ -64,37 +64,39 @@ function Search({courses, setCourses}) {
     //Runs on page load: gets users classes in their schedule & gets all the classes in the database
     useEffect(() => {
         //get users courses
-        // setTimeout(() => {
-        //     setCourses({
-        //         events: [
-        //             {
-        //                 "resource": "M/W/F",
-        //                 "start": "2023-11-02T14:15:00",
-        //                 "end": "2023-11-02T15:20:00",
-        //                 "text": "COEN 177\n2:15-3:20", 
-        //                 "title": "COEN 177",
-        //                 "id": 1, 
-        //             },
-        //             {
-        //                 "resource": "T/TH",
-        //                 "start": "2023-11-02T16:15:00",
-        //                 "end": "2023-11-02T17:23:00",
-        //                 "text": "MUSC 7\n4:15-5:23",
-        //                 "title": "MUSC 7",
-        //                 "id": 2, 
-        //             },
-        //         ]
-        //     });
-        // }, 1000);
-        fetch('127.0.0.1:8080/class/all/get')
+        fetch('http://127.0.0.1:8080/class/all/get')
         .then(response => {
             if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            console.log('Content-Type:', response.headers.get('Content-Type')); 
             return response.json();
         })
         .then(data => {
+            let classes = []; 
+            for(let classData of data){
+                console.log(classData);
+                function formatTimeString(dateTimeString) {
+                    const options = { hour: 'numeric', minute: 'numeric' };
+                    const formattedTime = new Date(dateTimeString).toLocaleTimeString([], options);
+                    return formattedTime;
+                }
+                const startTime = formatTimeString(`2023-11-02T${classData.start}:00`);
+                const endTime = formatTimeString(`2023-11-02T${classData.end}:00`);
+
+                const specificClass = {
+                    'title': classData.title, 
+                    'units': classData.units, 
+                    'name': classData.name,
+                    'start': startTime, 
+                    'end': endTime, 
+                    'seats': classData.seats,
+                    'professor': classData.professor,
+                    'days': classData.days,
+                    'id': classData.course_id, 
+                } 
+                classes.push(specificClass); 
+            }
+            setSearchResult(classes)
             console.log('Data:', data);
         })
         .catch(error => {
