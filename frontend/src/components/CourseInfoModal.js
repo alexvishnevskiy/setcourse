@@ -1,7 +1,6 @@
 import DeleteCourseModalCSS from './DeleteCourseModal.module.css';
 
 function CourseInfoModal({ courseInfo, btnInfo} ) { 
-    console.log('course info:', courseInfo); 
     const labelStyle = {
         color: '#9e9d9d'
     }

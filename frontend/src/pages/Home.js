@@ -20,49 +20,88 @@ function Home({ courses, setCourses, scheduleID}) {
         setOpenCourseInfoModal(prevState => !prevState);
     }
 
+    function formatTimeString(dateTimeString) {
+        const options = { hour: 'numeric', minute: 'numeric' };
+        const formattedTime = new Date(dateTimeString).toLocaleTimeString([], options);
+        return formattedTime.split(" ")[0];
+    } 
+
+    function formatTimeStringShowMeridiem(dateTimeString) {
+        const options = { hour: 'numeric', minute: 'numeric' };
+        const formattedTime = new Date(dateTimeString).toLocaleTimeString([], options);
+        return formattedTime;
+    } 
+
+    //Fetches the course info to show in modal
     const getCourseInfo = (course_id) => {
         //get the course info based on course_id
-        new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({
-                    'title': 'COEN 177', 
-                    'units': '4',
-                    'name': 'Operating Systems', 
-                    'co-requisites': 'COEN 177L - Operating Systems Lab', 
-                    'description': 'Introduction to computer operating systems. Operating system concepts, computer organization model, storage hierarchy, operating system organization, processes management, interprocess communication and synchronization, memory management and virtual memory, I/O subsystems, and file systems. Design, implementation, and performance issues.',
-                    'professor': 'Ahmed Amer', 
-                    'time': '11AM - 12:05PM', 
-                    'location': "O'Conner 207", 
-                    'id': 10
-                }); 
-            }, 1000);
+        fetch(`http://127.0.0.1:8080/class/info/get/${course_id}`)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
         })
         .then((data) => {
-            setCourseInfo(data);
+            const course = {
+                'title': data.title, 
+                'units': data.units, 
+                'name': data.name, 
+                'co-requisites': data['co-requisites'], 
+                'description': data.description, 
+                'professor': data.professor, 
+                'start': formatTimeStringShowMeridiem(`2023-11-02T${data.start}:00`), 
+                'end': formatTimeStringShowMeridiem(`2023-11-02T${data.end}:00`), 
+                'location': data.location, 
+                'class_id': data.class_id
+            }
+            setCourseInfo(course);
+            setOpenCourseInfoModal(prevState => !prevState);
         })
-        .then(() => {
-            setOpenCourseInfoModal(!openCourseInfoModal); 
-        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
     }
 
-    const onConfirmDelete = () => {
+    const onConfirmDelete = (course_id) => {
         //send request to database to remove class (schedule_id & class_id)
+        // /schedule/delete/<int:schedule_id>/<int:class_id>
+        console.log("item to delete ID:", course_id)
+        console.log('fetch string:', `http://127.0.0.1:8080/schedule/delete/${scheduleID}/${course_id}`)
+        fetch(`http://127.0.0.1/schedule/delete/${scheduleID}/${course_id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            console.log('response:', response)
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Failed to delete class");
+            }
+        })
+        .then((data) => {
+            console.log('success data:', data)
+        })
+        .catch((err)=> {
+            console.log("error on delete:", err)
+        })
+
         //on success (call setCourses)
-        const newEvents = courses.events.filter((event) => event.id !== itemToDelete.id);
-        new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(); 
-            }, 1000);
-        })
-        .then(() => {
-            setCourses({events: newEvents});
-            setItemToDelete(undefined);
-            setOpenDeleteModal(prevState => !prevState); 
-        })
-        .catch(() => {  
-            setItemToDelete(undefined);
-            setOpenDeleteModal(prevState => !prevState); 
-        })
+        // const newEvents = courses.events.filter((event) => event.id !== itemToDelete.id);
+        // new Promise((resolve, reject) => {
+        //     setTimeout(() => {
+        //         resolve(); 
+        //     }, 1000);
+        // })
+        // .then(() => {
+        //     setCourses({events: newEvents});
+        //     setItemToDelete(undefined);
+        //     setOpenDeleteModal(prevState => !prevState); 
+        // })
+        // .catch(() => {  
+        //     setItemToDelete(undefined);
+        //     setOpenDeleteModal(prevState => !prevState); 
+        // })
     }   
 
     const config = {
@@ -92,13 +131,7 @@ function Home({ courses, setCourses, scheduleID}) {
         },
     };
 
-    function formatTimeString(dateTimeString) {
-        const options = { hour: 'numeric', minute: 'numeric' };
-        const formattedTime = new Date(dateTimeString).toLocaleTimeString([], options);
-        return formattedTime.split(" ")[0];
-    } 
-
-    //Runs on page load: gets users classes in their schedule & gets all the classes in the database
+    //Runs on page load: gets users classes in their schedule
     useEffect(() => {
         //get users courses
         fetch(`http://127.0.0.1:8080/schedule/classes/get/${scheduleID}`)
@@ -132,6 +165,7 @@ function Home({ courses, setCourses, scheduleID}) {
         });
     }, []);
 
+    //Used to take the classes we have stored in state and convert them into a format the Calendar Component can use 
     const convertCoursesToCalendarFormat = (coursesList) => {
         if(coursesList.length <= 0) return coursesList; 
         const classesFormatted = {
@@ -154,7 +188,8 @@ function Home({ courses, setCourses, scheduleID}) {
         {openCourseInfoModal && <CourseInfoModal courseInfo={courseInfo} btnInfo={[
             {
                 clickHandler: infoModalHandler,
-                btnText: 'Close'
+                btnText: 'Close', 
+                id: 1
             }
         ]} btnText={"Close"}/>}
         <Header /> 
