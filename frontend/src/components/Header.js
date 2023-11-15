@@ -7,7 +7,7 @@ function Header() {
                         textDecoration: 'none'
                     }}>
             <img src='/sclogo.svg' alt='' style={{height:'25px', width:'25px'}}/>
-            <p className="m-0 ms-2 p-0">setCourse</p>
+            <p className="m-0 ms-3 p-0 fw-bold fs-5">setCourse</p>
         </Link>
         <Link to="/login" className="left m-0 p-0 d-flex align-items-center text-reset" style={{
                         textDecoration: 'none'
