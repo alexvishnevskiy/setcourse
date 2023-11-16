@@ -107,7 +107,7 @@ def list_classes_from_schedule(scheduleID):
         all_classes.append(
             {
                 'days': class_.days,
-                'start': start_time, #TODO: change later
+                'start': start_time, 
                 'end': end_time,
                 'title': course_.title,
                 'class_id': class_.cl_id
