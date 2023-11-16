@@ -227,25 +227,31 @@ function Search({courses, setCourses, scheduleID}) {
             }
         })
         .then((data) => {
-            fetch(`http://127.0.0.1:8080/class/info/get/${course_id}`)
+            fetch(`http://127.0.0.1:8080/schedule/classes/get/${scheduleID}`)
             .then(response => {
                 if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 return response.json();
             })
-            .then((fetchedClass) => {
-                setCourses((prevState) => {
+            .then((fetchedSchedule) => {
+                console.log('fetched schedule:', fetchedSchedule);
+                let newClasses = [];
+                for(let fetchedClass of fetchedSchedule){
+                    console.log('fetched class:', fetchedClass)
                     const startTime = formatTimeString(`2023-11-02T${fetchedClass.start}:00`);
                     const endTime = formatTimeString(`2023-11-02T${fetchedClass.end}:00`); 
-                    return { events: [...prevState.events, {
+                    newClasses.push({
                         'resource': fetchedClass.days,
                         'start': `2023-11-02T${fetchedClass.start}:00`,
                         'end': `2023-11-02T${fetchedClass.end}:00`,
                         'text': `${fetchedClass.title}\n${startTime}-${endTime}`,
                         'title': fetchedClass.title,
                         'id': fetchedClass.class_id
-                    }]}
+                    });
+                }
+                setCourses({
+                    events: newClasses
                 })
                 setStatus({
                     currentStatus: true,

@@ -1,6 +1,7 @@
 from app.repository import *
 from app.constants import *
 import random
+from datetime import datetime
 
 
 # internal function to split start and end times
@@ -9,27 +10,64 @@ def _split_time(time: str):
     end_time = time.split('-')[1].strip()
     return start_time, end_time
 
+def _split_days(days: str):
+    return days.split('/')
+
+def _do_classes_overlap(s1, e1, s2, e2):
+    format_str = "%H:%M"
+    class1_start = datetime.strptime(s1, format_str)
+    class1_end = datetime.strptime(e1, format_str)
+    class2_start = datetime.strptime(s2, format_str)
+    class2_end = datetime.strptime(e2, format_str)
+
+    return max(class1_start, class2_start) < min(class1_end, class2_end)
+
 def add_class2schedule(scheduleID, classID):
     class_, status = getClass(classID)
     if status != SUCCESS:
         return status
-
-    # check if the course associated with the class is already in the schedule. If so return a message that says the course is already in your schedule
-    # check for time conflict (time conflict occurs when times overlap on the same day). If there is a time conflict remove the conflicting courses and add the class the user wants to add to the schedule.
-
+    
     classTime = class_.time # class time
     classesID, status = getClassesFromSchedule(scheduleID) # all classes for this schedule
     if status != SUCCESS:
         print("No classes for this schedule")
-    
-    # check time conflict
+        
+    # check for time conflict (time conflict occurs when times overlap on the same day). If there is a time conflict remove the conflicting courses and add the class the user wants to add to the schedule.
+    conflictingClasses = []
+    nonConflictingClasses = []
+    classToAddDays = _split_days(class_.days)
     for cl_id in classesID:
-        # TODO: redo in future
         cl_, status = getClass(cl_id)
-        if status != SUCCESS:
-            return status
-        if cl_.time == classTime:
-            return TIME_CONFLICT
+        #check if they occur on the same day
+        specificClassDays = _split_days(cl_.days)
+        #if the occcur on same day check if times overlap
+        if any(day in specificClassDays for day in classToAddDays):
+            print('Class is on the same day')
+            s1,e1 = _split_time(class_.time)
+            s2,e2 = _split_time(cl_.time)
+            # if classes overlap
+            if(_do_classes_overlap(s1,e1,s2,e2)):
+                print('Times conflict')
+                conflictingClasses.append(cl_.cl_id)
+        if(cl_.cl_id not in conflictingClasses):
+            nonConflictingClasses.append(cl_.cl_id)
+    # check if any of the non conflicting classes are of the same course
+    coursesInSchedule = []
+    print('conflicting classe ID:', conflictingClasses)
+    print('NON-conflicting classe ID:', nonConflictingClasses)
+    for cl_id in nonConflictingClasses:
+        cl_, status = getClass(cl_id)
+        coursesInSchedule.append(cl_.c_id)
+    if class_.c_id in coursesInSchedule:
+        return CLASS_EXISTS
+    
+    # remove conflicting classes
+    if(len(conflictingClasses) > 0):
+        for specificClassID in conflictingClasses:
+            status = delete_course_from_schedule(scheduleID, specificClassID)
+            if status != SUCCESS:
+                return status
+        
 
     # calculate total units for all courses in schedule
     classesID += [class_.cl_id]

@@ -83,12 +83,14 @@ INSERT  INTO schedule (user_id, term) VALUES (2, 'Fall');
 -- Course
 INSERT  INTO course (title, co_reqs, core_req, name, units) VALUES ('CSCI 180', 'CSCI 180 L', '', 'Management of software', 5);
 INSERT  INTO course (title, co_reqs, core_req, name, units) VALUES ('ARTS 30', 'N/A', 'Art, Natural Science', 'Spirituality in Diversified Societies', 4);
+INSERT  INTO course (title, co_reqs, core_req, name, units) VALUES ('CSCI 187', 'N/A', '', 'Design and Management of Software', 5);
 
 -- Classes
 INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('14:00 - 15:30', 'Fall', 'M/W/F', 'Class A ...', 'O Connor 207', 1);
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:00 - 11:30', 'Fall', 'T/TH', 'Class B ...', 'O Connor 208', 1);
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:00 - 11:30', 'Fall', 'M/F', 'Class C ...', 'O Connor 209', 2);
+INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('15:40 - 16:40', 'Fall', 'T/TH', 'Class B ...', 'O Connor 208', 1);
+INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('15:40 - 16:40', 'Fall', 'M/F', 'Class C ...', 'O Connor 209', 2);
 INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:00 - 11:30', 'Fall', 'M/W/F', 'Class D ...', 'O Connor 210', 2);
+INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('15:20 - 16:20', 'Fall', 'M/W/F', 'Class E ...', 'O Connor 211', 3);
 
 -- Professors
 INSERT  INTO professors (first_name, last_name) VALUES ('John', 'Doe');
@@ -106,6 +108,7 @@ INSERT INTO teach (pr_id, cl_id) VALUES (1, 3);
 INSERT INTO teach (pr_id, cl_id) VALUES (2, 2);
 INSERT INTO teach (pr_id, cl_id) VALUES (3, 3);
 INSERT INTO teach (pr_id, cl_id) VALUES (3, 4);
+INSERT INTO teach (pr_id, cl_id) VALUES (3, 5);
 
 -- Schedule2class
 -- INSERT INTO schedule2class(cl_id, sch_id) VALUES (1, 1);
