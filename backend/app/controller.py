@@ -14,6 +14,9 @@ def add_class2schedule(scheduleID, classID):
     if status != SUCCESS:
         return status
 
+    # check if the course associated with the class is already in the schedule. If so return a message that says the course is already in your schedule
+    # check for time conflict (time conflict occurs when times overlap on the same day). If there is a time conflict remove the conflicting courses and add the class the user wants to add to the schedule.
+
     classTime = class_.time # class time
     classesID, status = getClassesFromSchedule(scheduleID) # all classes for this schedule
     if status != SUCCESS:

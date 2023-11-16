@@ -39,7 +39,7 @@ function Search({courses, setCourses, scheduleID}) {
 
     //Holds information about the filters the user has selected
     const [coreReqs, setCoreReqs] = useState([]);
-    const [days, setDays] = useState([]);
+    const [days, setDays] = useState(null);
 
     function formatTimeString(dateTimeString) {
         const options = { hour: 'numeric', minute: 'numeric' };
@@ -118,18 +118,78 @@ function Search({courses, setCourses, scheduleID}) {
             coreReqsArr.push(encodeURIComponent(filter.value));
         }
 
-        const daysArr = [];
-        for(let filter of days){
-            daysArr.push(encodeURIComponent(filter.value));
+        const daysArr = (days === null || days === undefined) ? [] : [encodeURIComponent(days.value)] ;
+
+        const createQueryString = (search_query, core_req, days_filter) => {
+            let start = "/class/all/get"; 
+            let count = 0; 
+            if(search_query !== undefined){
+                count++; 
+                start += "?"+search_query; 
+            }
+            if(core_req !== undefined){
+                if(count > 0){
+                    start += `&core_req=${coreReqsArr.join('&core_req=')}`;
+                }
+                else{
+                    start += '?' + `core_req=${coreReqsArr.join('&core_req=')}`
+                    count++;
+                }
+            }
+            if(days_filter !== undefined){
+                if(count > 0){
+                    start += `&days=${daysArr.join('&days=')}`;
+                }
+                else{
+                    start += '?' + `days=${daysArr.join('&days=')}`
+                    count++;
+                }
+            }
+            return start; 
         }
 
-        // console.log('Core Req Filters:', coreReqsArr)
-        // console.log('Days Filters:', daysArr)
-        const url = `/class/all/get?search_query=${searchQuery}&core_req=${coreReqsArr.join('&core_req=')}&days=${daysArr.join('&days=')}`;
-        console.log("Your Search Query:", url); 
-        
-        // setSearchResult(result);
-        // setSearchQuery(''); 
+        const search_query = searchQuery.trim().length > 0 ? `search_query=${encodeURIComponent(searchQuery.trim())}` : undefined; 
+        const core_req = coreReqsArr.length > 0 ? coreReqsArr : undefined; 
+        const days_filter = daysArr.length > 0 ? daysArr : undefined; 
+
+        const url = createQueryString(search_query, core_req, days_filter)
+
+        fetch('http://127.0.0.1:8080'+url)
+        .then((response) => {
+            if(response.ok){
+                return response.json()
+            }
+            throw new Error("failed to get classes"); 
+        })
+        .then((fetchedClasses) => {
+            if(fetchedClasses.length > 0){
+                let classes = []; 
+                for(let classData of fetchedClasses){
+                    const specificClass = {
+                        'title': classData.title, 
+                        'units': classData.units, 
+                        'name': classData.name,
+                        'start': `T${classData.start}:00`, 
+                        'end': `T${classData.end}:00`, 
+                        'seats': classData.seats,
+                        'professor': classData.professor,
+                        'days': classData.days,
+                        'id': classData.class_id, 
+                    } 
+                    classes.push(specificClass); 
+                }
+                setSearchResult(classes);
+                setSearchQuery(''); 
+            }
+            else{
+                setSearchResult(undefined);
+                setSearchQuery(''); 
+            }
+        })
+        .catch((err) => {
+            setSearchResult(undefined);
+            setSearchQuery(''); 
+        })
     }
 
     //Runs when a user clicks on a class listing to view info

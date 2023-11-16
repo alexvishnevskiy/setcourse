@@ -3,19 +3,29 @@ import Select from 'react-select'
 import "./Sidebar.css"
 
 const coreReqs = [
-  { value: 'art', label: 'Art' },
+  { value: 'advanced writing', label: 'Advanced Writing' },
+  { value: 'arts', label: 'Arts' },
+  { value: 'civic engagement', label: 'Civic Engagement' },
+  { value: 'ctw1', label: 'CTW1' },
+  { value: 'ctw2', label: 'CTW2' },
+  { value: 'c&i1', label: 'Cultures & Ideas 1' },
+  { value: 'c&i2', label: 'Cultures and Ideas 2' },
+  { value: 'c&i3', label: 'Cultures and Ideas 3' },
+  { value: 'diversity', label: 'Diversity' },
+  { value: 'ethics', label: 'Ethics' },
+  { value: 'elsj', label: 'Experiential Learning for Social Justics' },
+  { value: 'math', label: 'Mathematics' },
   { value: 'natural science', label: 'Natural Science' },
-  { value: 'religion 1', label: 'Religion 1' }
+  { value: 'rel1', label: 'Rel. 1' },
+  { value: 'rel2', label: 'Rel. 2' },
+  { value: 'rel3', label: 'Rel. 3' },
+  { value: 'sts', label: 'Science, Technology & Society' },
+  { value: 'social science', label: 'Social Science' },
 ]
 
 const days = [
-  { value: 'monday', label: 'Monday' },
-  { value: 'tuesday', label: 'Tuesday' },
-  { value: 'wednesday', label: 'Wednesday' },
-  { value: 'thursday', label: 'Thursday' },
-  { value: 'friday', label: 'Friday' },
-  { value: 'saturday', label: 'Saturday' },
-  { value: 'sunday', label: 'Sunday' },
+  { value: 'M/W/F', label: 'MWF' },
+  { value: 'T/TH', label: 'TTH' },
 ]
 
 function SearchSidebar({setCoreReqs, setDays}) {
@@ -39,7 +49,7 @@ function SearchSidebar({setCoreReqs, setDays}) {
             <div>
               <p className="m-0 mt-1 mb-1 p-0 fw-bold input-label">Day</p>
               <Select
-                isMulti
+                isClearable
                 name="colors"
                 options={days}
                 className="basic-multi-select"

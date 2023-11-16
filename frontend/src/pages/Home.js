@@ -53,6 +53,7 @@ function Home({ courses, setCourses, scheduleID}) {
                 'start': formatTimeStringShowMeridiem(`2023-11-02T${data.start}:00`), 
                 'end': formatTimeStringShowMeridiem(`2023-11-02T${data.end}:00`), 
                 'location': data.location, 
+                'days': data.days,
                 'class_id': data.class_id
             }
             setCourseInfo(course);
@@ -65,14 +66,10 @@ function Home({ courses, setCourses, scheduleID}) {
 
     const onConfirmDelete = (course_id) => {
         //send request to database to remove class (schedule_id & class_id)
-        // /schedule/delete/<int:schedule_id>/<int:class_id>
-        console.log("item to delete ID:", course_id)
-        console.log('fetch string:', `http://127.0.0.1:8080/schedule/delete/${scheduleID}/${course_id}`)
-        fetch(`http://127.0.0.1/schedule/delete/${scheduleID}/${course_id}`, {
+        fetch(`http://127.0.0.1:8080/schedule/delete/${scheduleID}/${course_id}`, {
             method: 'DELETE'
         })
         .then(response => {
-            console.log('response:', response)
             if (response.ok) {
                 return response.json();
             } else {
@@ -80,28 +77,16 @@ function Home({ courses, setCourses, scheduleID}) {
             }
         })
         .then((data) => {
-            console.log('success data:', data)
+            const newEvents = courses.events.filter((event) => event.id !== course_id);
+            // console.log('new events:', newEvents)
+            setCourses({events: newEvents});
+            setItemToDelete(undefined);
+            setOpenDeleteModal(prevState => !prevState); 
         })
         .catch((err)=> {
-            console.log("error on delete:", err)
+            setItemToDelete(undefined);
+            setOpenDeleteModal(prevState => !prevState); 
         })
-
-        //on success (call setCourses)
-        // const newEvents = courses.events.filter((event) => event.id !== itemToDelete.id);
-        // new Promise((resolve, reject) => {
-        //     setTimeout(() => {
-        //         resolve(); 
-        //     }, 1000);
-        // })
-        // .then(() => {
-        //     setCourses({events: newEvents});
-        //     setItemToDelete(undefined);
-        //     setOpenDeleteModal(prevState => !prevState); 
-        // })
-        // .catch(() => {  
-        //     setItemToDelete(undefined);
-        //     setOpenDeleteModal(prevState => !prevState); 
-        // })
     }   
 
     const config = {
@@ -143,6 +128,9 @@ function Home({ courses, setCourses, scheduleID}) {
         })
         .then((classes) => {
             const classesArr = [];
+            if(classes.length <= 0) {
+                return;
+            }
             for(let singleClass of classes){
                 const startTime = formatTimeString(`2023-11-02T${singleClass.start}:00`);
                 const endTime = formatTimeString(`2023-11-02T${singleClass.end}:00`);
@@ -167,10 +155,10 @@ function Home({ courses, setCourses, scheduleID}) {
 
     //Used to take the classes we have stored in state and convert them into a format the Calendar Component can use 
     const convertCoursesToCalendarFormat = (coursesList) => {
-        if(coursesList.length <= 0) return coursesList; 
         const classesFormatted = {
             events: []
         }
+        if(coursesList.length <= 0) return classesFormatted; 
         for(let i = 0; i < coursesList.length; i++){
             const daysOffered = coursesList[i].resource.split('/');
             for(let day of daysOffered){

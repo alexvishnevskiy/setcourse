@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS course (
   c_id INT NOT NULL AUTO_INCREMENT,
   title VARCHAR(15) NOT NULL,
   co_reqs VARCHAR(20) NULL,
+  core_req VARCHAR(100) NOT NULL,
   name VARCHAR(100) NOT NULL,
   units INT NOT NULL,
   PRIMARY KEY (c_id)
@@ -80,8 +81,8 @@ INSERT  INTO schedule (user_id, term) VALUES (1, 'Fall');
 INSERT  INTO schedule (user_id, term) VALUES (2, 'Fall');
 
 -- Course
-INSERT  INTO course (title, co_reqs, name, units) VALUES ('CSCI 180', 'CSCI 180 L', 'Management of software', 5);
-INSERT  INTO course (title, co_reqs, name, units) VALUES ('SOCI 143', 'SOCI 143 L', 'Sociology', 5);
+INSERT  INTO course (title, co_reqs, core_req, name, units) VALUES ('CSCI 180', 'CSCI 180 L', '', 'Management of software', 5);
+INSERT  INTO course (title, co_reqs, core_req, name, units) VALUES ('ARTS 30', 'N/A', 'Art, Natural Science', 'Spirituality in Diversified Societies', 4);
 
 -- Classes
 INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('14:00 - 15:30', 'Fall', 'M/W/F', 'Class A ...', 'O Connor 207', 1);
@@ -107,7 +108,7 @@ INSERT INTO teach (pr_id, cl_id) VALUES (3, 3);
 INSERT INTO teach (pr_id, cl_id) VALUES (3, 4);
 
 -- Schedule2class
-INSERT INTO schedule2class(cl_id, sch_id) VALUES (1, 1);
+-- INSERT INTO schedule2class(cl_id, sch_id) VALUES (1, 1);
 -- INSERT INTO schedule2class(cl_id, sch_id) VALUES (2, 1);
 -- INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 1);
 INSERT INTO schedule2class(cl_id, sch_id) VALUES (4, 2);

@@ -14,6 +14,10 @@ function CourseInfoModal({ courseInfo, btnInfo} ) {
                         <p className="col m-0 p-0">{ courseInfo.title} - { courseInfo.name}</p>
                     </div>
                     <div className='row m-0 mb-3 p-0'>
+                        <p className="col-3 m-0 p-0" style={labelStyle}>Days</p>
+                        <p className="col m-0 p-0">{ courseInfo.days }</p>
+                    </div>
+                    <div className='row m-0 mb-3 p-0'>
                         <p className="col-3 m-0 p-0" style={labelStyle}>Units</p>
                         <p className="col m-0 p-0">{ courseInfo.units}</p>
                     </div>
