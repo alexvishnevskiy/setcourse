@@ -9,14 +9,14 @@ function App() {
     events: []
   });
 
-  const [scheduleID, setScheduleID] = useState(undefined);
+  const [scheduleID, setScheduleID] = useState(1);
 
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route index element={<Home courses={courses} setCourses={setCourses}/>} />
-          <Route path='/search' element={<Search courses={courses} setCourses={setCourses}/>} />
+          <Route index element={<Home courses={courses} setCourses={setCourses} scheduleID={scheduleID}/>} />
+          <Route path='/search' element={<Search courses={courses} setCourses={setCourses} scheduleID={scheduleID}/>} />
           <Route path='/login' element={<Login />} />
         </Routes>
       </BrowserRouter>

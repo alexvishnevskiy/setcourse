@@ -24,6 +24,7 @@ class Course(db.Model):
     title = db.Column(db.String(15), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     co_reqs = db.Column(db.String(20), nullable=True) # TODO: probably redo to course_id
+    core_req = db.Column(db.String(100), nullable=True)
     units = db.Column(db.Integer, nullable=False)
     classes = db.relationship('Classes', backref='course', lazy=True)
 

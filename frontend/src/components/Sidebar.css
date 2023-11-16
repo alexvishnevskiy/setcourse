@@ -83,3 +83,7 @@
 .basic-multi-select input {
     color: white !important; 
 }
+
+.select__input, .select__single-value {
+    color: white !important; 
+}
