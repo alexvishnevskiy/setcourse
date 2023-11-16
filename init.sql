@@ -82,7 +82,7 @@ INSERT  INTO schedule (user_id, term) VALUES (2, 'Fall');
 
 -- Course
 INSERT  INTO course (title, co_reqs, core_req, name, units) VALUES ('CSCI 180', 'CSCI 180 L', '', 'Management of software', 5);
-INSERT  INTO course (title, co_reqs, core_req, name, units) VALUES ('ARTS 30', 'N/A', 'Art, Natural Science', 'Spirituality in Diversified Societies', 4);
+INSERT  INTO course (title, co_reqs, core_req, name, units) VALUES ('ARTS 30', 'N/A', 'arts, Natural Science', 'Spirituality in Diversified Societies', 4);
 INSERT  INTO course (title, co_reqs, core_req, name, units) VALUES ('CSCI 187', 'N/A', '', 'Design and Management of Software', 5);
 
 -- Classes
