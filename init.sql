@@ -165,8 +165,8 @@ INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (6, 25, 25);
 
 
 -- Schedule2class
--- INSERT INTO schedule2class(cl_id, sch_id) VALUES (1, 1);
--- INSERT INTO schedule2class(cl_id, sch_id) VALUES (2, 1);
--- INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 1);
--- INSERT INTO schedule2class(cl_id, sch_id) VALUES (4, 2);
--- INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 2);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (1, 1);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (2, 1);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 1);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (4, 2);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 2);
