@@ -6,7 +6,6 @@ function CourseConflictModal({ conflictingCourses, onCancel, onReplace} ) {
     }
 
     const parentClass = conflictingCourses.parent;
-    console.log('parentClass:', parentClass)
 
     return (
         <>

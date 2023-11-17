@@ -4,7 +4,6 @@ function CourseInfoModal({ courseInfo, btnInfo} ) {
     const labelStyle = {
         color: '#9e9d9d'
     }
-    console.log('courseinfo:', courseInfo)
     return (
         <>
             <div className={`${DeleteCourseModalCSS.backdrop} h-100 w-100 position-absolute bg-dark`}></div>

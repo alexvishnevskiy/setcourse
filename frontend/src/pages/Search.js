@@ -9,6 +9,7 @@ import React, { useState, useEffect } from 'react';
 import CourseInfoModal from '../components/CourseInfoModal';
 import { Link } from 'react-router-dom'; 
 import CourseConflictModal from '../components/CourseConflictModal';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 /*
 TODO: 
@@ -33,13 +34,16 @@ function Search({courses, setCourses, scheduleID}) {
     //Holds status of whether adding class to schedule succeeded or failed
     const [showStatus, setShowStatus] = useState(false); 
     const [status, setStatus] = useState({
-        currentStatus: false, 
+        currentStatus: null, 
         message: 'An error occured'
     }); 
 
     //Holds information about the filters the user has selected
     const [coreReqs, setCoreReqs] = useState([]);
     const [days, setDays] = useState(null);
+
+    //loading
+    const [isLoading, setIsLoading] = useState(false);
 
     function formatTimeString(dateTimeString) {
         const options = { hour: 'numeric', minute: 'numeric' };
@@ -50,6 +54,7 @@ function Search({courses, setCourses, scheduleID}) {
     //Runs on page load: gets users classes in their schedule & gets all the classes in the database
     useEffect(() => {
         //get users courses
+        setIsLoading(true);
         fetch(`http://127.0.0.1:8080/schedule/classes/get/${scheduleID}`)
         .then(response => {
             if (!response.ok) {
@@ -101,6 +106,7 @@ function Search({courses, setCourses, scheduleID}) {
                     } 
                     classes.push(specificClass); 
                 }
+                setIsLoading(false);
                 setSearchResult(classes)
             })
         })
@@ -236,7 +242,6 @@ function Search({courses, setCourses, scheduleID}) {
             method: 'POST',
         })
         .then(response => {
-            console.log('response:', response)
             if (response.ok) {
                 return response.json();
             } else {
@@ -254,10 +259,8 @@ function Search({courses, setCourses, scheduleID}) {
                 return response.json();
             })
             .then((fetchedSchedule) => {
-                console.log('fetched schedule:', fetchedSchedule);
                 let newClasses = [];
                 for(let fetchedClass of fetchedSchedule){
-                    console.log('fetched class:', fetchedClass)
                     const startTime = formatTimeString(`2023-11-02T${fetchedClass.start}:00`);
                     const endTime = formatTimeString(`2023-11-02T${fetchedClass.end}:00`); 
                     newClasses.push({
@@ -303,7 +306,6 @@ function Search({courses, setCourses, scheduleID}) {
         })
         .then((fetchedClass) => {
             //check time conflict (which classes it conflicts with)
-            console.log('fetched class', fetchedClass)
             let classConflicts = []; 
             for(let i = 0; i < courses.events.length; i++){
                 const startInterval = new Date(courses.events[i].start).getTime();
@@ -401,6 +403,7 @@ function Search({courses, setCourses, scheduleID}) {
                     <div className='page-body d-flex flex-column m-0 pe-3 p-0 gap-2 overflow-auto' style={{
                         flex: 1
                     }}>
+                            {isLoading && <LoadingSpinner />}
                             {
                                 searchResult && searchResult.length>0 && searchResult.map((result) => {
                                     return <CourseList courses={courses} result={result} key={result.id} onAddCourse={onAddCourse} handleShowCourseInfo={handleShowCourseInfo}/>

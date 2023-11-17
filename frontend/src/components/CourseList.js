@@ -7,7 +7,6 @@ import CourseListCSS from './CourseList.module.css';
 const checkIfTimingOverlap = (startTime, endTime, courses, result) => {
       for(let i = 0; i < courses.events.length; i++){
         if(courses.events[i].id === result.id){
-          console.log('set true')
           return <FaCheckCircle size={20} style={{color: 'gray'}}/> 
         }
         const startInterval = new Date(courses.events[i].start).getTime();

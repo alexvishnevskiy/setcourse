@@ -78,7 +78,6 @@ function Home({ courses, setCourses, scheduleID}) {
         })
         .then((data) => {
             const newEvents = courses.events.filter((event) => event.id !== course_id);
-            // console.log('new events:', newEvents)
             setCourses({events: newEvents});
             setItemToDelete(undefined);
             setOpenDeleteModal(prevState => !prevState); 

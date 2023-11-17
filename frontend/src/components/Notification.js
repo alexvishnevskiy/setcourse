@@ -1,4 +1,7 @@
 function Notification({status, setShowStatus}) {
+    if(status.currentStatus === null) {
+        return;
+    }
     const handleSetStatus = () => {
         setShowStatus((prevState) => !prevState)
     }

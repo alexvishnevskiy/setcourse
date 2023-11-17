@@ -76,10 +76,10 @@ def getAllClasses(search_query=None, core_req=None, days=None):
     # get all classes with or without filters
     classesWithDetails = models.Classes.query.join(models.Course)
 
+    print('core_req:', core_req)
     if core_req is not None:
         classesWithDetails = classesWithDetails.filter(and_(*[models.Course.core_req.like(f"%{core}%") for core in core_req]))
     if days is not None:
-        print('days:', days[0])
         classesWithDetails = classesWithDetails.filter(and_(*[models.Classes.days.like(f"%{days[0]}%")]))
     if search_query is not None:
         classesWithDetails = classesWithDetails.filter(
@@ -88,6 +88,7 @@ def getAllClasses(search_query=None, core_req=None, days=None):
                 models.Course.title.op('REGEXP')(f"{search_query}")
             )
         )
+    print('classes with details:', classesWithDetails.all())
 
     if classesWithDetails is None:
         return None, NO_CLASS
