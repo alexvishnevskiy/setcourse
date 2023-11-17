@@ -1,0 +1,8 @@
+.wrapper {
+    transition: background 0.5s ease;
+    background: rgb(234,234,234);
+}
+
+.wrapper:hover {
+    background: rgb(216 216 216);
+}

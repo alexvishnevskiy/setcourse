@@ -58,8 +58,8 @@ def get_class_info(class_id):
 @cross_origin(supports_credentials=True)
 def all_classes():
     search_query = request.args.get('search_query', default=None, type=str)
-    core_req = request.args.get('core_req', default=None, type=str)
-    days = request.args.get('days', default=None, type=str)
+    core_req = request.args.getlist('core_req', type=str) or None
+    days = request.args.getlist('days', type=str) or None
 
     all_classes, status = get_all_classes(search_query, core_req, days)
     if status != SUCCESS: 

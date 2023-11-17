@@ -4,6 +4,7 @@ function CourseInfoModal({ courseInfo, btnInfo} ) {
     const labelStyle = {
         color: '#9e9d9d'
     }
+    console.log('courseinfo:', courseInfo)
     return (
         <>
             <div className={`${DeleteCourseModalCSS.backdrop} h-100 w-100 position-absolute bg-dark`}></div>
@@ -12,6 +13,10 @@ function CourseInfoModal({ courseInfo, btnInfo} ) {
                     <div className='row m-0 mb-3 p-0'>
                         <p className="col-3 m-0 p-0" style={labelStyle}>Title</p>
                         <p className="col m-0 p-0">{ courseInfo.title} - { courseInfo.name}</p>
+                    </div>
+                    <div className='row m-0 mb-3 p-0'>
+                        <p className="col-3 m-0 p-0" style={labelStyle}>Days</p>
+                        <p className="col m-0 p-0">{ courseInfo.days }</p>
                     </div>
                     <div className='row m-0 mb-3 p-0'>
                         <p className="col-3 m-0 p-0" style={labelStyle}>Units</p>
@@ -43,7 +48,7 @@ function CourseInfoModal({ courseInfo, btnInfo} ) {
                     btnInfo.map((info) => {
                         return <button key={info.id} className={`${DeleteCourseModalCSS.modalButton} rounded border-0`} style={{
                             background: info.backColor
-                        }} onClick={() => {info.clickHandler(courseInfo.id)}}>{info.btnText}</button>
+                        }} onClick={() => {info.clickHandler(courseInfo['class_id'])}}>{info.btnText}</button>
                     })
                 }
                 </div>

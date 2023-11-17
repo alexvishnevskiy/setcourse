@@ -17,7 +17,7 @@ TODO:
 - Function to display times nicely
 */
 
-function Search({courses, setCourses}) {
+function Search({courses, setCourses, scheduleID}) {
     //Holds information about the users search query 
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResult, setSearchResult] = useState(undefined); 
@@ -32,106 +32,258 @@ function Search({courses, setCourses}) {
 
     //Holds status of whether adding class to schedule succeeded or failed
     const [showStatus, setShowStatus] = useState(false); 
-    const [status, setStatus] = useState(false); 
+    const [status, setStatus] = useState({
+        currentStatus: false, 
+        message: 'An error occured'
+    }); 
 
-    const tempDB = [{
-        'title': 'MATH 122', 
-        'units': '5',
-        'name': 'Probability & Statistics 1', 
-        'co-requisites': 'N/A', 
-        'description': 'Sample spaces; conditional probability; independence; random variables; discrete and continuous probability distributions; expectation; moment-generating functions; weak law of large numbers; central limit theorem.',
-        'professor': 'Robert Bekes', 
-        "start": "T14:00:00",
-        "end": "T15:20:00",
-        'location': "O'Conner 205",
-        'seats': 13, 
-        'id': 1
-    },
-    {
-        'title': 'RSOC 128', 
-        'units': '5',
-        'name': 'Religion & Popular Culture', 
-        'co-requisites': 'N/A', 
-        'description': 'Examines the relationships between religious practice and culture expressions understood as appealing to the non-elite masses through various media (print, television, movies, music, etc.), personages (religious celebrities, entertainment celebrities, sports stars), embodied expressions and enhancements (clothing, jewelry, tattoos, piercings, etc.) and other material forms (mugs, water bottles, statues, posters, etc.). Considers how depictions of religion in popular culture forms affects how we understand religious experiences, practitioners, and communities and how religion itself functions as an element of cultural production that contributes to popular interest.',
-        'professor': 'Elizabeth Drescher', 
-        "start": "T08:15:00",
-        "end": "T09:20:00",
-        'location': "Kenna Hall 311",
-        'seats': 10, 
-        'id': 2
-    }]
+    //Holds information about the filters the user has selected
+    const [coreReqs, setCoreReqs] = useState([]);
+    const [days, setDays] = useState(null);
+
+    function formatTimeString(dateTimeString) {
+        const options = { hour: 'numeric', minute: 'numeric' };
+        const formattedTime = new Date(dateTimeString).toLocaleTimeString([], options);
+        return formattedTime.split(" ")[0];
+    } 
 
     //Runs on page load: gets users classes in their schedule & gets all the classes in the database
     useEffect(() => {
         //get users courses
-        // setTimeout(() => {
-        //     setCourses({
-        //         events: [
-        //             {
-        //                 "resource": "M/W/F",
-        //                 "start": "2023-11-02T14:15:00",
-        //                 "end": "2023-11-02T15:20:00",
-        //                 "text": "COEN 177\n2:15-3:20", 
-        //                 "title": "COEN 177",
-        //                 "id": 1, 
-        //             },
-        //             {
-        //                 "resource": "T/TH",
-        //                 "start": "2023-11-02T16:15:00",
-        //                 "end": "2023-11-02T17:23:00",
-        //                 "text": "MUSC 7\n4:15-5:23",
-        //                 "title": "MUSC 7",
-        //                 "id": 2, 
-        //             },
-        //         ]
-        //     });
-        // }, 1000);
-        fetch('127.0.0.1:8080/class/all/get')
+        fetch(`http://127.0.0.1:8080/schedule/classes/get/${scheduleID}`)
         .then(response => {
             if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            console.log('Content-Type:', response.headers.get('Content-Type')); 
             return response.json();
         })
-        .then(data => {
-            console.log('Data:', data);
+        .then((classes) => {
+            const classesArr = [];
+            for(let singleClass of classes){
+                const startTime = formatTimeString(`2023-11-02T${singleClass.start}:00`);
+                const endTime = formatTimeString(`2023-11-02T${singleClass.end}:00`);
+                const classObj = {
+                    'resource': singleClass.days,
+                    'start': `2023-11-02T${singleClass.start}:00`,
+                    'end': `2023-11-02T${singleClass.end}:00`,
+                    'text': `${singleClass.title}\n${startTime}-${endTime}`,
+                    'title': singleClass.title,
+                    'id': singleClass.class_id
+                }
+                classesArr.push(classObj);
+            }
+            setCourses({
+                events: classesArr
+            })
+        })
+        .then(() => {
+            //send request to get all classes for current term, place in search result state 
+            fetch('http://127.0.0.1:8080/class/all/get')
+            .then(response => {
+                if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                let classes = []; 
+                for(let classData of data){
+                    const specificClass = {
+                        'title': classData.title, 
+                        'units': classData.units, 
+                        'name': classData.name,
+                        'start': `T${classData.start}:00`, 
+                        'end': `T${classData.end}:00`, 
+                        'seats': classData.seats,
+                        'professor': classData.professor,
+                        'days': classData.days,
+                        'id': classData.class_id, 
+                    } 
+                    classes.push(specificClass); 
+                }
+                setSearchResult(classes)
+            })
         })
         .catch(error => {
             console.error('Fetch error:', error);
         });
-        //send request to get all classes for current term, place in search result state 
-        console.log("Request sent for classes in schedule");
-        console.log("Request sent for all classes in DB");
     }, []);
 
     //Runs when user clicks search. 
     const onSearch = () => {
         //sends request to API with searchQuery, gets back result 
-        console.log("Your Search Query:", searchQuery); 
-        const result = tempDB;
-        setSearchResult(result);
-        setSearchQuery(''); 
+        // /class/all/get?search_query=<>&core_req=<>&days=<>
+        const coreReqsArr = [];
+        for(let filter of coreReqs){
+            coreReqsArr.push(encodeURIComponent(filter.value));
+        }
+
+        const daysArr = (days === null || days === undefined) ? [] : [encodeURIComponent(days.value)] ;
+
+        const createQueryString = (search_query, core_req, days_filter) => {
+            let start = "/class/all/get"; 
+            let count = 0; 
+            if(search_query !== undefined){
+                count++; 
+                start += "?"+search_query; 
+            }
+            if(core_req !== undefined){
+                if(count > 0){
+                    start += `&core_req=${coreReqsArr.join('&core_req=')}`;
+                }
+                else{
+                    start += '?' + `core_req=${coreReqsArr.join('&core_req=')}`
+                    count++;
+                }
+            }
+            if(days_filter !== undefined){
+                if(count > 0){
+                    start += `&days=${daysArr.join('&days=')}`;
+                }
+                else{
+                    start += '?' + `days=${daysArr.join('&days=')}`
+                    count++;
+                }
+            }
+            return start; 
+        }
+
+        const search_query = searchQuery.trim().length > 0 ? `search_query=${encodeURIComponent(searchQuery.trim())}` : undefined; 
+        const core_req = coreReqsArr.length > 0 ? coreReqsArr : undefined; 
+        const days_filter = daysArr.length > 0 ? daysArr : undefined; 
+
+        const url = createQueryString(search_query, core_req, days_filter)
+
+        fetch('http://127.0.0.1:8080'+url)
+        .then((response) => {
+            if(response.ok){
+                return response.json()
+            }
+            throw new Error("failed to get classes"); 
+        })
+        .then((fetchedClasses) => {
+            if(fetchedClasses.length > 0){
+                let classes = []; 
+                for(let classData of fetchedClasses){
+                    const specificClass = {
+                        'title': classData.title, 
+                        'units': classData.units, 
+                        'name': classData.name,
+                        'start': `T${classData.start}:00`, 
+                        'end': `T${classData.end}:00`, 
+                        'seats': classData.seats,
+                        'professor': classData.professor,
+                        'days': classData.days,
+                        'id': classData.class_id, 
+                    } 
+                    classes.push(specificClass); 
+                }
+                setSearchResult(classes);
+                setSearchQuery(''); 
+            }
+            else{
+                setSearchResult(undefined);
+                setSearchQuery(''); 
+            }
+        })
+        .catch((err) => {
+            setSearchResult(undefined);
+            setSearchQuery(''); 
+        })
     }
+
+    function formatTimeStringShowMeridiem(dateTimeString) {
+        const options = { hour: 'numeric', minute: 'numeric' };
+        const formattedTime = new Date(dateTimeString).toLocaleTimeString([], options);
+        return formattedTime;
+    } 
 
     //Runs when a user clicks on a class listing to view info
     const handleShowCourseInfo = (course_id) => {
-        console.log("View Course Info for course with ID:", course_id);
-        new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(tempDB.find((item) => item.id === course_id)); 
-            }, 100);
+        fetch(`http://127.0.0.1:8080/class/info/get/${course_id}`)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
         })
         .then((data) => {
-            setCourseInfo(data);
+            const course = {
+                'title': data.title, 
+                'units': data.units, 
+                'name': data.name, 
+                'co-requisites': data['co-requisites'], 
+                'description': data.description, 
+                'professor': data.professor, 
+                'start': formatTimeStringShowMeridiem(`2023-11-02T${data.start}:00`), 
+                'end': formatTimeStringShowMeridiem(`2023-11-02T${data.end}:00`), 
+                'location': data.location, 
+                'days': data.days,
+                'class_id': data.class_id
+            }
+            setCourseInfo(course);
             setOpenCourseInfoModal(prevState => !prevState);
         })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
     }
 
     //Runs after verifying class repalcement or simply adding a course
     const completeAddingCourse = (course_id) => {
         //add course using API endpoint
-        setStatus(true); 
+        fetch(`http://127.0.0.1:8080/courses/add/${scheduleID}/${course_id}`, {
+            method: 'POST',
+        })
+        .then(response => {
+            console.log('response:', response)
+            if (response.ok) {
+                return response.json();
+            } else {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message);
+                })
+            }
+        })
+        .then((data) => {
+            fetch(`http://127.0.0.1:8080/schedule/classes/get/${scheduleID}`)
+            .then(response => {
+                if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((fetchedSchedule) => {
+                console.log('fetched schedule:', fetchedSchedule);
+                let newClasses = [];
+                for(let fetchedClass of fetchedSchedule){
+                    console.log('fetched class:', fetchedClass)
+                    const startTime = formatTimeString(`2023-11-02T${fetchedClass.start}:00`);
+                    const endTime = formatTimeString(`2023-11-02T${fetchedClass.end}:00`); 
+                    newClasses.push({
+                        'resource': fetchedClass.days,
+                        'start': `2023-11-02T${fetchedClass.start}:00`,
+                        'end': `2023-11-02T${fetchedClass.end}:00`,
+                        'text': `${fetchedClass.title}\n${startTime}-${endTime}`,
+                        'title': fetchedClass.title,
+                        'id': fetchedClass.class_id
+                    });
+                }
+                setCourses({
+                    events: newClasses
+                })
+                setStatus({
+                    currentStatus: true,
+                    message: data.message
+                }); 
+            })
+        })
+        .catch(error => {
+            setStatus({
+                currentStatus: false,
+                message: error.message
+            }); 
+        });
         setShowStatus(true); 
         setCourseInfo(undefined);
         openCourseInfoModal && setOpenCourseInfoModal(prevState => !prevState); 
@@ -142,38 +294,57 @@ function Search({courses, setCourses}) {
     //Checks to see if the class the user wants to add conflicts with a class already in their schedule
     const checkIfTimingOverlap = (course_id) => {
         //get the course
-        const fetchedClass = tempDB.find((item) => item.id === course_id);
-        //check time conflict (which classes it conflicts with)
-        let classConflicts = []; 
-        for(let i = 0; i < courses.events.length; i++){
-            const startInterval = new Date(courses.events[i].start).getTime();
-            const endInterval = new Date(courses.events[i].end).getTime();
-            const targetStart = new Date("2023-11-02" + fetchedClass.start).getTime();
-            const targetEnd = new Date("2023-11-02" + fetchedClass.end).getTime();
-            if((startInterval <= targetEnd && targetEnd <= endInterval) || (targetStart <= endInterval && endInterval <= targetEnd)){
-                classConflicts.push(courses.events[i].title);
+        fetch(`http://127.0.0.1:8080/class/info/get/${course_id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
-        }
-        //if conflict enable modal
-        if(classConflicts.length > 0){
-            setConflictCourses({
-                'parent': fetchedClass, 
-                'conflicts': classConflicts,
-            });
-            if(openCourseInfoModal){
-                setCourseInfo(undefined);
-                setOpenCourseInfoModal(prevState => !prevState)
+            return response.json();
+        })
+        .then((fetchedClass) => {
+            //check time conflict (which classes it conflicts with)
+            console.log('fetched class', fetchedClass)
+            let classConflicts = []; 
+            for(let i = 0; i < courses.events.length; i++){
+                const startInterval = new Date(courses.events[i].start).getTime();
+                const endInterval = new Date(courses.events[i].end).getTime();
+                const targetStart = new Date("2023-11-02T" + fetchedClass.start + ":00").getTime();
+                const targetEnd = new Date("2023-11-02T" + fetchedClass.end + ":00").getTime();
+                if(startInterval <= targetEnd && targetEnd <= endInterval || targetStart <= endInterval && endInterval <= targetEnd){
+                    const currentClassDays = fetchedClass.days.split("/");
+                    const currentSearchResultClassDays = courses.events[i].resource.split("/");
+                    if(currentClassDays.some(item => currentSearchResultClassDays.includes(item))){
+                        classConflicts.push(courses.events[i].title);
+                    }
+                }
             }
-            setOpenCourseConflictModal(true);
-        }
-        else{
-            completeAddingCourse(course_id)
-        }
+            //if conflict enable modal
+            if(classConflicts.length > 0){
+                setConflictCourses({
+                    'parent': fetchedClass, 
+                    'conflicts': classConflicts,
+                });
+                if(openCourseInfoModal){
+                    setCourseInfo(undefined);
+                    setOpenCourseInfoModal(prevState => !prevState)
+                }
+                setOpenCourseConflictModal(true);
+            }
+            else{
+                completeAddingCourse(course_id)
+            }
+        })
+
     }
 
     //Runs when a user directly clicks to add a course
     const onAddCourse = (course_id) => {
-        console.log("Click to add course with ID:", course_id);
+        //check if its already in the schedule (then do nothing)
+        for(let i = 0; i < courses.events.length; i++){
+            if(courses.events[i].id === course_id){
+                return;
+            }
+        }
         checkIfTimingOverlap(course_id);
     }
 
@@ -211,7 +382,7 @@ function Search({courses, setCourses}) {
             {showStatus && <Notification status={status} setShowStatus={setShowStatus}/> }
             <Header /> 
             <div className='site-body search-wrapper m-3 p-0 gap-2 d-flex' style={{flex: 1, minHeight: 0}}>
-                <SearchSidebar /> 
+                <SearchSidebar setCoreReqs={setCoreReqs} setDays={setDays}/> 
                 <div className='page-container col m-0 p-0 gap-1 d-flex flex-column' style={{
                     flex: 1,
                     minHeight: 0

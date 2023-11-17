@@ -1,7 +1,7 @@
 from app import db, models
 from app.constants import *
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 
 
 def addClassToSchedule(scheduleID, classID):
@@ -77,17 +77,17 @@ def getAllClasses(search_query=None, core_req=None, days=None):
     classesWithDetails = models.Classes.query.join(models.Course)
 
     if core_req is not None:
-        classesWithDetails = classesWithDetails.filter(models.Course.co_reqs == core_req)
+        classesWithDetails = classesWithDetails.filter(and_(*[models.Course.core_req.like(f"%{core}%") for core in core_req]))
     if days is not None:
-        classesWithDetails = classesWithDetails.filter(models.Classes.days == days)
+        print('days:', days[0])
+        classesWithDetails = classesWithDetails.filter(and_(*[models.Classes.days.like(f"%{days[0]}%")]))
     if search_query is not None:
         classesWithDetails = classesWithDetails.filter(
             or_(
-                models.Course.name.op('REGEXP')(f"{search_query}*"),
-                models.Course.title.op('REGEXP')(f"{search_query}*")
+                models.Course.name.op('REGEXP')(f"{search_query}"),
+                models.Course.title.op('REGEXP')(f"{search_query}")
             )
         )
-    classesWithDetails = classesWithDetails.all()
 
     if classesWithDetails is None:
         return None, NO_CLASS

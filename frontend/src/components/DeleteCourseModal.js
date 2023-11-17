@@ -8,7 +8,7 @@ function DeleteCourseModal({setOpenDeleteModal, onConfirmDelete, itemToDelete}) 
                 <p className="m-0 p-0 text-white">Are you sure you want to delete <span className="m-0 p-0 text-info fst-italic">{itemToDelete.title}</span> from your schedule?</p>
                 <div className="m-0 p-0 d-flex gap-2">
                     <button className={`${DeleteCourseModalCSS.modalButton} rounded border-0`} onClick={() => {setOpenDeleteModal(prevState => !prevState)}}>Cancel</button>
-                    <button className={`${DeleteCourseModalCSS.modalButton} rounded border-0 bg-danger text-white`} onClick={() => {onConfirmDelete()}}>Yes, delete</button>
+                    <button className={`${DeleteCourseModalCSS.modalButton} rounded border-0 bg-danger text-white`} onClick={() => {onConfirmDelete(itemToDelete.id)}}>Yes, delete</button>
                 </div>
             </div>
         </>

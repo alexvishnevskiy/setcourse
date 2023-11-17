@@ -15,25 +15,25 @@ services:
     # networks:
     #   - setcourse
 
-  # backend:
-  #   restart: always
-  #   build: 
-  #     context: './backend'
-  #   networks:
-  #     - setcourse
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - mysql
+#   backend:
+#     restart: always
+#     build: 
+#       context: './backend'
+#     networks:
+#       - setcourse
+#     ports:
+#       - "8080:8080"
+#     depends_on:
+#       - mysql
 
-  # frontend:
-  #   restart: always
-  #   build: 
-  #     context: './frontend'
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - setcourse
+#   frontend:
+#     restart: always
+#     build: 
+#       context: './frontend'
+#     ports:
+#       - "3000:3000"
+#     networks:
+#       - setcourse
 
 # networks:
 #   setcourse:

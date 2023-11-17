@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
 import CourseInfoModal from '../components/CourseInfoModal';
 
-function Home({ courses, setCourses }) {
+function Home({ courses, setCourses, scheduleID}) {
     const [openDeleteModal, setOpenDeleteModal] = useState(false); 
     const [itemToDelete, setItemToDelete] = useState(undefined); 
 
@@ -20,46 +20,70 @@ function Home({ courses, setCourses }) {
         setOpenCourseInfoModal(prevState => !prevState);
     }
 
+    function formatTimeString(dateTimeString) {
+        const options = { hour: 'numeric', minute: 'numeric' };
+        const formattedTime = new Date(dateTimeString).toLocaleTimeString([], options);
+        return formattedTime.split(" ")[0];
+    } 
+
+    function formatTimeStringShowMeridiem(dateTimeString) {
+        const options = { hour: 'numeric', minute: 'numeric' };
+        const formattedTime = new Date(dateTimeString).toLocaleTimeString([], options);
+        return formattedTime;
+    } 
+
+    //Fetches the course info to show in modal
     const getCourseInfo = (course_id) => {
         //get the course info based on course_id
-        new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({
-                    'title': 'COEN 177', 
-                    'units': '4',
-                    'name': 'Operating Systems', 
-                    'co-requisites': 'COEN 177L - Operating Systems Lab', 
-                    'description': 'Introduction to computer operating systems. Operating system concepts, computer organization model, storage hierarchy, operating system organization, processes management, interprocess communication and synchronization, memory management and virtual memory, I/O subsystems, and file systems. Design, implementation, and performance issues.',
-                    'professor': 'Ahmed Amer', 
-                    'time': '11AM - 12:05PM', 
-                    'location': "O'Conner 207", 
-                    'id': 10
-                }); 
-            }, 1000);
+        fetch(`http://127.0.0.1:8080/class/info/get/${course_id}`)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
         })
         .then((data) => {
-            setCourseInfo(data);
+            const course = {
+                'title': data.title, 
+                'units': data.units, 
+                'name': data.name, 
+                'co-requisites': data['co-requisites'], 
+                'description': data.description, 
+                'professor': data.professor, 
+                'start': formatTimeStringShowMeridiem(`2023-11-02T${data.start}:00`), 
+                'end': formatTimeStringShowMeridiem(`2023-11-02T${data.end}:00`), 
+                'location': data.location, 
+                'days': data.days,
+                'class_id': data.class_id
+            }
+            setCourseInfo(course);
+            setOpenCourseInfoModal(prevState => !prevState);
         })
-        .then(() => {
-            setOpenCourseInfoModal(!openCourseInfoModal); 
-        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
     }
 
-    const onConfirmDelete = () => {
+    const onConfirmDelete = (course_id) => {
         //send request to database to remove class (schedule_id & class_id)
-        //on success (call setCourses)
-        const newEvents = courses.events.filter((event) => event.id !== itemToDelete.id);
-        new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(); 
-            }, 1000);
+        fetch(`http://127.0.0.1:8080/schedule/delete/${scheduleID}/${course_id}`, {
+            method: 'DELETE'
         })
-        .then(() => {
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Failed to delete class");
+            }
+        })
+        .then((data) => {
+            const newEvents = courses.events.filter((event) => event.id !== course_id);
+            // console.log('new events:', newEvents)
             setCourses({events: newEvents});
             setItemToDelete(undefined);
             setOpenDeleteModal(prevState => !prevState); 
         })
-        .catch(() => {  
+        .catch((err)=> {
             setItemToDelete(undefined);
             setOpenDeleteModal(prevState => !prevState); 
         })
@@ -92,43 +116,49 @@ function Home({ courses, setCourses }) {
         },
     };
 
+    //Runs on page load: gets users classes in their schedule
     useEffect(() => {
-        //make a call to the API to get all the classes in the users schedule
-        //Using the validated user from the login page (you have their unique ID)
-        //With their unique ID get the schedule ID that is saved in the database 
-        //With the Schedule ID (save this in a state?) send a request to the database for their schedule
-        //Once you have received their schedule, update the state (which will update the UI)
-
-        //simulating query
-        setTimeout(() => {
+        //get users courses
+        fetch(`http://127.0.0.1:8080/schedule/classes/get/${scheduleID}`)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((classes) => {
+            const classesArr = [];
+            if(classes.length <= 0) {
+                return;
+            }
+            for(let singleClass of classes){
+                const startTime = formatTimeString(`2023-11-02T${singleClass.start}:00`);
+                const endTime = formatTimeString(`2023-11-02T${singleClass.end}:00`);
+                const classObj = {
+                    'resource': singleClass.days,
+                    'start': `2023-11-02T${singleClass.start}:00`,
+                    'end': `2023-11-02T${singleClass.end}:00`,
+                    'text': `${singleClass.title}\n${startTime}-${endTime}`,
+                    'title': singleClass.title,
+                    'id': singleClass.class_id
+                }
+                classesArr.push(classObj);
+            }
             setCourses({
-                events: [
-                    {
-                        "resource": "M/W/F",
-                        "start": "2023-11-02T14:15:00",
-                        "end": "2023-11-02T15:20:00",
-                        "text": "COEN 177\n2:15-3:20", 
-                        "title": "COEN 177",
-                        "id": 1, 
-                    },
-                    {
-                        "resource": "T/TH",
-                        "start": "2023-11-02T16:15:00",
-                        "end": "2023-11-02T17:23:00",
-                        "text": "MUSC 7\n4:15-5:23",
-                        "title": "MUSC 7",
-                        "id": 2, 
-                    },
-                ]
-            });
-        }, 1000);
-    }, []); 
+                events: classesArr
+            })
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+    }, []);
 
+    //Used to take the classes we have stored in state and convert them into a format the Calendar Component can use 
     const convertCoursesToCalendarFormat = (coursesList) => {
-        if(coursesList.length <= 0) return coursesList; 
         const classesFormatted = {
             events: []
         }
+        if(coursesList.length <= 0) return classesFormatted; 
         for(let i = 0; i < coursesList.length; i++){
             const daysOffered = coursesList[i].resource.split('/');
             for(let day of daysOffered){
@@ -146,7 +176,8 @@ function Home({ courses, setCourses }) {
         {openCourseInfoModal && <CourseInfoModal courseInfo={courseInfo} btnInfo={[
             {
                 clickHandler: infoModalHandler,
-                btnText: 'Close'
+                btnText: 'Close', 
+                id: 1
             }
         ]} btnText={"Close"}/>}
         <Header /> 

@@ -6,6 +6,7 @@ function CourseConflictModal({ conflictingCourses, onCancel, onReplace} ) {
     }
 
     const parentClass = conflictingCourses.parent;
+    console.log('parentClass:', parentClass)
 
     return (
         <>
@@ -14,7 +15,7 @@ function CourseConflictModal({ conflictingCourses, onCancel, onReplace} ) {
                 <p className="m-0 p-0 text-white"><span className="m-0 p-0 text-info fst-italic">{parentClass.title}</span> conflicts with <span className="m-0 p-0 text-info fst-italic">{conflictingCourses.conflicts.join(', ')}</span> already in your schedule. Would you like to replace the conflicting classes?</p>
                 <div className="m-0 p-0 d-flex gap-2">
                     <button className={`${DeleteCourseModalCSS.modalButton} rounded border-0`} onClick={() => {onCancel()}}>Cancel</button>
-                    <button className={`${DeleteCourseModalCSS.modalButton} rounded border-0 bg-danger text-white`} onClick={() => {onReplace(parentClass.id)}}>Yes, replace</button>
+                    <button className={`${DeleteCourseModalCSS.modalButton} rounded border-0 bg-danger text-white`} onClick={() => {onReplace(parentClass.class_id)}}>Yes, replace</button>
                 </div>
             </div>
         </>
