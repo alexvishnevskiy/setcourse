@@ -72,6 +72,46 @@ CREATE TABLE IF NOT EXISTS schedule2class (
   FOREIGN KEY (sch_id) REFERENCES schedule(sch_id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS classAvail (
+  cl_id INT NOT NULL,
+  total_seats INT NOT NULL,
+  available_seats INT NOT NULL,
+  PRIMARY KEY (cl_id),
+  FOREIGN KEY (cl_id) REFERENCES classes(cl_id) ON DELETE CASCADE
+);
+
+-- trigger to decrease available seats
+DELIMITER //
+
+CREATE TRIGGER decrease_available_seats
+AFTER INSERT ON schedule2class
+FOR EACH ROW
+BEGIN
+    UPDATE classAvail
+    SET available_seats = available_seats - 1
+    WHERE cl_id = NEW.cl_id;
+END;
+
+//
+DELIMITER ;
+
+
+-- -- trigger to increase available seats
+DELIMITER //
+
+CREATE TRIGGER increase_available_seats
+AFTER DELETE ON schedule2class
+FOR EACH ROW
+BEGIN
+    UPDATE classAvail
+    SET available_seats = available_seats + 1
+    WHERE cl_id = OLD.cl_id;
+END;
+
+//
+DELIMITER ;
+
+
 -- User
 INSERT  INTO user (first_name, last_name) VALUES ('Alice', 'Smith');
 INSERT  INTO user (first_name, last_name) VALUES ('Bob', 'Johnson');
@@ -113,6 +153,15 @@ INSERT INTO teach (pr_id, cl_id) VALUES (2, 3);
 INSERT INTO teach (pr_id, cl_id) VALUES (3, 4);
 INSERT INTO teach (pr_id, cl_id) VALUES (4, 5);
 INSERT INTO teach (pr_id, cl_id) VALUES (5, 6);
+
+
+-- classAvail
+INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (1, 25, 25);
+INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (2, 20, 20);
+INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (3, 30, 30);
+INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (4, 20, 20);
+INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (5, 15, 15);
+INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (6, 25, 25);
 
 
 -- Schedule2class
