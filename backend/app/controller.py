@@ -164,12 +164,6 @@ def get_all_classes(search_query=None, core_req=None, days=None):
             print('No professor for this class')
             professor_details = models.Professors(first_name = '', last_name = '')
 
-        # number of seats
-        n_seats, status = getNumberOfSeats(class_.cl_id)
-        if status != SUCCESS:
-            print("No information for available seats for this class")
-            n_seats = -1
-
         start_time, end_time = _split_time(class_.time)
         all_classes.append({
             'title': class_.course.title,
@@ -177,7 +171,7 @@ def get_all_classes(search_query=None, core_req=None, days=None):
             'professor': professor_details.first_name + ' ' + professor_details.last_name,
             'start': start_time,
             'end': end_time,
-            'seats': n_seats,
+            'seats': class_.total_seats,
             'class_id': class_.cl_id,
             'days': class_.days
         })

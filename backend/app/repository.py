@@ -101,10 +101,3 @@ def deleteCourseFromSchedule(scheduleId, classId):
         return SUCCESS
     else:
         return NO_SCHEDULE_OR_CLASS
-
-def getNumberOfSeats(classId):
-    n_seats = models.classAvail.query.get(classId)
-
-    if n_seats is None:
-        return None, NO_CLASS
-    return n_seats.available_seats, SUCCESS

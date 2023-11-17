@@ -32,6 +32,7 @@ class Classes(db.Model):
     cl_id = db.Column(db.Integer, primary_key=True)
     time = db.Column(db.String(50), nullable=False)
     term = db.Column(db.Enum(ChoiceEnum), nullable=False)
+    total_seats = db.Column(db.Integer, nullable=False)
     days = db.Column(db.String(5), nullable=False)
     description = db.Column(db.String(700), nullable=True)
     location = db.Column(db.String(100), nullable=True)
@@ -57,12 +58,6 @@ class Professors(db.Model):
 class Teach(db.Model):
     pr_id = db.Column(db.Integer, db.ForeignKey('professors.pr_id'), primary_key=True)
     cl_id = db.Column(db.Integer, db.ForeignKey('classes.cl_id'), primary_key=True)
-
-class classAvail(db.Model):
-    __tablename__ = 'classAvail'
-    cl_id = db.Column(db.Integer, db.ForeignKey('classes.cl_id'), primary_key=True)
-    total_seats = db.Column(db.Integer, nullable=False)
-    available_seats = db.Column(db.Integer, nullable=False)
 
 class Schedule2Class(db.Model):
     __tablename__ = 'schedule2class'
