@@ -35,7 +35,7 @@ function Home({ courses, setCourses, scheduleID}) {
     //Fetches the course info to show in modal
     const getCourseInfo = (course_id) => {
         //get the course info based on course_id
-        fetch(`http://127.0.0.1:8080/class/info/get/${course_id}`)
+        fetch(`http://127.0.0.1:8081/class/info/get/${course_id}`)
         .then(response => {
             if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -66,7 +66,7 @@ function Home({ courses, setCourses, scheduleID}) {
 
     const onConfirmDelete = (course_id) => {
         //send request to database to remove class (schedule_id & class_id)
-        fetch(`http://127.0.0.1:8080/schedule/delete/${scheduleID}/${course_id}`, {
+        fetch(`http://127.0.0.1:8081/schedule/delete/${scheduleID}/${course_id}`, {
             method: 'DELETE'
         })
         .then(response => {
@@ -118,7 +118,7 @@ function Home({ courses, setCourses, scheduleID}) {
     //Runs on page load: gets users classes in their schedule
     useEffect(() => {
         //get users courses
-        fetch(`http://127.0.0.1:8080/schedule/classes/get/${scheduleID}`)
+        fetch(`http://127.0.0.1:8081/schedule/classes/get/${scheduleID}`)
         .then(response => {
             if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);

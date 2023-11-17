@@ -55,7 +55,7 @@ function Search({courses, setCourses, scheduleID}) {
     useEffect(() => {
         //get users courses
         setIsLoading(true);
-        fetch(`http://127.0.0.1:8080/schedule/classes/get/${scheduleID}`)
+        fetch(`http://127.0.0.1:8081/schedule/classes/get/${scheduleID}`)
         .then(response => {
             if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -83,7 +83,7 @@ function Search({courses, setCourses, scheduleID}) {
         })
         .then(() => {
             //send request to get all classes for current term, place in search result state 
-            fetch('http://127.0.0.1:8080/class/all/get')
+            fetch('http://127.0.0.1:8081/class/all/get')
             .then(response => {
                 if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -160,7 +160,7 @@ function Search({courses, setCourses, scheduleID}) {
 
         const url = createQueryString(search_query, core_req, days_filter)
 
-        fetch('http://127.0.0.1:8080'+url)
+        fetch('http://127.0.0.1:8081'+url)
         .then((response) => {
             if(response.ok){
                 return response.json()
@@ -206,7 +206,7 @@ function Search({courses, setCourses, scheduleID}) {
 
     //Runs when a user clicks on a class listing to view info
     const handleShowCourseInfo = (course_id) => {
-        fetch(`http://127.0.0.1:8080/class/info/get/${course_id}`)
+        fetch(`http://127.0.0.1:8081/class/info/get/${course_id}`)
         .then(response => {
             if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -238,7 +238,7 @@ function Search({courses, setCourses, scheduleID}) {
     //Runs after verifying class repalcement or simply adding a course
     const completeAddingCourse = (course_id) => {
         //add course using API endpoint
-        fetch(`http://127.0.0.1:8080/courses/add/${scheduleID}/${course_id}`, {
+        fetch(`http://127.0.0.1:8081/courses/add/${scheduleID}/${course_id}`, {
             method: 'POST',
         })
         .then(response => {
@@ -251,7 +251,7 @@ function Search({courses, setCourses, scheduleID}) {
             }
         })
         .then((data) => {
-            fetch(`http://127.0.0.1:8080/schedule/classes/get/${scheduleID}`)
+            fetch(`http://127.0.0.1:8081/schedule/classes/get/${scheduleID}`)
             .then(response => {
                 if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -297,7 +297,7 @@ function Search({courses, setCourses, scheduleID}) {
     //Checks to see if the class the user wants to add conflicts with a class already in their schedule
     const checkIfTimingOverlap = (course_id) => {
         //get the course
-        fetch(`http://127.0.0.1:8080/class/info/get/${course_id}`)
+        fetch(`http://127.0.0.1:8081/class/info/get/${course_id}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
