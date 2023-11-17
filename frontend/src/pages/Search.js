@@ -192,6 +192,12 @@ function Search({courses, setCourses, scheduleID}) {
         })
     }
 
+    function formatTimeStringShowMeridiem(dateTimeString) {
+        const options = { hour: 'numeric', minute: 'numeric' };
+        const formattedTime = new Date(dateTimeString).toLocaleTimeString([], options);
+        return formattedTime;
+    } 
+
     //Runs when a user clicks on a class listing to view info
     const handleShowCourseInfo = (course_id) => {
         fetch(`http://127.0.0.1:8080/class/info/get/${course_id}`)
@@ -202,7 +208,20 @@ function Search({courses, setCourses, scheduleID}) {
             return response.json();
         })
         .then((data) => {
-            setCourseInfo(data);
+            const course = {
+                'title': data.title, 
+                'units': data.units, 
+                'name': data.name, 
+                'co-requisites': data['co-requisites'], 
+                'description': data.description, 
+                'professor': data.professor, 
+                'start': formatTimeStringShowMeridiem(`2023-11-02T${data.start}:00`), 
+                'end': formatTimeStringShowMeridiem(`2023-11-02T${data.end}:00`), 
+                'location': data.location, 
+                'days': data.days,
+                'class_id': data.class_id
+            }
+            setCourseInfo(course);
             setOpenCourseInfoModal(prevState => !prevState);
         })
         .catch(error => {
