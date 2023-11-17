@@ -26,11 +26,12 @@ const Calendar = ({ config, courses }) => {
     };  
 
     useEffect(() => {
-        const adjustEachCourse = (events) => {
+        const adjustEachCourse = () => {
+            if(courses.events.length <= 0) return;
             const courseList = document.querySelectorAll(".calendar_default_event");
             for(let i = 0; i < courseList.length; i++){
                 const courseID = courseList[i].event.id();
-                const courseObj = events.find((course) => course.id === courseID);
+                const courseObj = courses.events.find((course) => course.id === courseID);
                 const start = courseObj.start.value;
                 const end = courseObj.end.value;
                 const startPixel = determineStartPixel(start);
@@ -40,7 +41,7 @@ const Calendar = ({ config, courses }) => {
                 courseList[i].children[0].style.setProperty("background", `${colors[courseID]}`, "important");
             }
         }  
-        adjustEachCourse(courses.events);
+        adjustEachCourse();
     }, [config, courses]);
 
     return (

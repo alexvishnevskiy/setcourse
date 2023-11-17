@@ -24,6 +24,7 @@ class Course(db.Model):
     title = db.Column(db.String(15), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     co_reqs = db.Column(db.String(20), nullable=True) # TODO: probably redo to course_id
+    core_req = db.Column(db.String(100), nullable=True)
     units = db.Column(db.Integer, nullable=False)
     classes = db.relationship('Classes', backref='course', lazy=True)
 
@@ -32,8 +33,8 @@ class Classes(db.Model):
     time = db.Column(db.String(50), nullable=False)
     term = db.Column(db.Enum(ChoiceEnum), nullable=False)
     days = db.Column(db.String(5), nullable=False)
-    description = db.Column(db.String(150), nullable=True)
-    location = db.Column(db.String(15), nullable=True)
+    description = db.Column(db.String(700), nullable=True)
+    location = db.Column(db.String(100), nullable=True)
     c_id = db.Column(db.Integer, db.ForeignKey('course.c_id'), nullable=False)
     reviews = db.relationship('Reviews', backref='classes', lazy=True)
     professor = db.relationship('Teach', backref='classes', lazy=True)
