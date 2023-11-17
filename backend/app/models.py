@@ -58,6 +58,12 @@ class Teach(db.Model):
     pr_id = db.Column(db.Integer, db.ForeignKey('professors.pr_id'), primary_key=True)
     cl_id = db.Column(db.Integer, db.ForeignKey('classes.cl_id'), primary_key=True)
 
+class classAvail(db.Model):
+    __tablename__ = 'classAvail'
+    cl_id = db.Column(db.Integer, db.ForeignKey('classes.cl_id'), primary_key=True)
+    total_seats = db.Column(db.Integer, nullable=False)
+    available_seats = db.Column(db.Integer, nullable=False)
+
 class Schedule2Class(db.Model):
     __tablename__ = 'schedule2class'
     cl_id = db.Column(db.Integer, db.ForeignKey('classes.cl_id'), primary_key=True)

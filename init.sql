@@ -72,6 +72,46 @@ CREATE TABLE IF NOT EXISTS schedule2class (
   FOREIGN KEY (sch_id) REFERENCES schedule(sch_id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS classAvail (
+  cl_id INT NOT NULL,
+  total_seats INT NOT NULL,
+  available_seats INT NOT NULL,
+  PRIMARY KEY (cl_id),
+  FOREIGN KEY (cl_id) REFERENCES classes(cl_id) ON DELETE CASCADE
+);
+
+-- trigger to decrease available seats
+DELIMITER //
+
+CREATE TRIGGER decrease_available_seats
+AFTER INSERT ON schedule2class
+FOR EACH ROW
+BEGIN
+    UPDATE classAvail
+    SET available_seats = available_seats - 1
+    WHERE cl_id = NEW.cl_id;
+END;
+
+//
+DELIMITER ;
+
+
+-- -- trigger to increase available seats
+DELIMITER //
+
+CREATE TRIGGER increase_available_seats
+AFTER DELETE ON schedule2class
+FOR EACH ROW
+BEGIN
+    UPDATE classAvail
+    SET available_seats = available_seats + 1
+    WHERE cl_id = OLD.cl_id;
+END;
+
+//
+DELIMITER ;
+
+
 -- User
 INSERT  INTO user (first_name, last_name) VALUES ('Alice', 'Smith');
 INSERT  INTO user (first_name, last_name) VALUES ('Bob', 'Johnson');
@@ -157,87 +197,18 @@ INSERT  INTO schedule (user_id, term) VALUES (2, 'Fall');
 -- INSERT INTO teach (pr_id, cl_id) VALUES (10, 17);
 
 
+-- classAvail
+INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (1, 25, 25);
+INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (2, 20, 20);
+INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (3, 30, 30);
+INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (4, 20, 20);
+INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (5, 15, 15);
+INSERT INTO classAvail (cl_id, total_seats, available_seats) VALUES (6, 25, 25);
+
+
 -- Schedule2class
--- INSERT INTO schedule2class(cl_id, sch_id) VALUES (1, 1);
--- INSERT INTO schedule2class(cl_id, sch_id) VALUES (2, 1);
--- INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 1);
--- INSERT INTO schedule2class(cl_id, sch_id) VALUES (4, 2);
--- INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 2);
-
--- BEGIN
-INSERT  INTO course (title, co_reqs, core_req, name, units) VALUES ('ACTG 11', 'N/A', '', 'Introduction to Financial Accounting', 4);
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('09:15 - 10:20', 'Fall', 'M/W/F', 'class description', 'Rm 207 Lucas Hall', 1);
-INSERT  INTO professors (first_name, last_name) VALUES ('Haidan', 'Li');
-INSERT INTO teach (pr_id, cl_id) VALUES (1, 1);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:30 - 11:35', 'Fall', 'M/W/F', 'class description', 'Rm 207 Lucas Hall', 1);
-INSERT INTO teach (pr_id, cl_id) VALUES (1, 2);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('13:00 - 14:05', 'Fall', 'M/W/F', 'class description', 'RM 2302 SCDI', 1);
-INSERT INTO teach (pr_id, cl_id) VALUES (1, 3);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('08:30 - 10:10', 'Fall', 'T/TH', 'class description', 'Rm 214 Kenna Hall', 1);
-INSERT  INTO professors (first_name, last_name) VALUES ('Stacey', 'Ritter');
-INSERT INTO teach (pr_id, cl_id) VALUES (2, 4);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('15:50 - 17:30', 'Fall', 'T/TH', 'class description', 'Rm 209 Lucas Hall', 1);
-INSERT  INTO professors (first_name, last_name) VALUES ('Christopher', 'Paisley');
-INSERT INTO teach (pr_id, cl_id) VALUES (3, 5);
-
-
-INSERT  INTO course (title, co_reqs, core_req, name, units) VALUES ('ACTG 11A', 'N/A', '', 'Introduction to Financial Accounting', 4);
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('12:10 - 13:50', 'Fall', 'T/TH', 'class description', 'Rm 164 Graham Hall', 2);
-INSERT  INTO professors (first_name, last_name) VALUES ('Ke', 'Li');
-INSERT INTO teach (pr_id, cl_id) VALUES (4, 6);
-
-
-INSERT  INTO course (title, co_reqs, core_req, name, units) VALUES ('ACTG 12', 'N/A', '', 'Introduction to Managerial Accounting', 4);
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('11:45 - 12:50', 'Fall', 'M/W/F', 'class description', 'Rm 120 Alumni Science Hall', 3);
-INSERT  INTO professors (first_name, last_name) VALUES ('Stephen', 'Carter');
-INSERT INTO teach (pr_id, cl_id) VALUES (5, 7);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('08:30 - 10:10', 'Fall', 'T/TH', 'class description', 'Rm 129 Vari Hall', 3);
-INSERT  INTO professors (first_name, last_name) VALUES ('Joseph', 'Maglione');
-INSERT INTO teach (pr_id, cl_id) VALUES (6, 8);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:20 - 12:00', 'Fall', 'T/TH', 'class description', 'Rm 129 Vari Hall', 3);
-INSERT INTO teach (pr_id, cl_id) VALUES (6, 9);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('09:15 - 10:20', 'Fall', 'M/W/F', 'class description', 'Rm 206 Lucas Hall', 3);
-INSERT  INTO professors (first_name, last_name) VALUES ('Wendy', 'Donohoe');
-INSERT INTO teach (pr_id, cl_id) VALUES (7, 10);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:30 - 11:35', 'Fall', 'M/W/F', 'class description', 'Rm 206 Lucas Hall', 3);
-INSERT INTO teach (pr_id, cl_id) VALUES (7, 11);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('14:00 - 15:40', 'Fall', 'T/TH', 'class description', 'Rm 102 Kenna Hall', 3);
-INSERT  INTO professors (first_name, last_name) VALUES ('Haoning', 'Richter');
-INSERT INTO teach (pr_id, cl_id) VALUES (8, 12);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('15:50 - 17:30', 'Fall', 'T/TH', 'class description', 'Rm 102 Kenna Hall', 3);
-INSERT INTO teach (pr_id, cl_id) VALUES (8, 13);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('17:40 - 19:10', 'Fall', 'T/TH', 'class description', 'Rm 102 Kenna Hall', 3);
-INSERT INTO teach (pr_id, cl_id) VALUES (8, 14);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('09:15 - 10:20', 'Fall', 'M/W/F', 'class description', 'Rm 116 Bergin Hall', 3);
-INSERT  INTO professors (first_name, last_name) VALUES ('Qiru', 'Zhang');
-INSERT INTO teach (pr_id, cl_id) VALUES (9, 15);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('10:30 - 11:35', 'Fall', 'M/W/F', 'class description', 'Rm 103 Alameda hall', 3);
-INSERT INTO teach (pr_id, cl_id) VALUES (9, 16);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('13:00 - 14:05', 'Fall', 'M/W/F', 'class description', 'RM 3115 SCDI', 3);
-INSERT INTO teach (pr_id, cl_id) VALUES (9, 17);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('08:30 - 10:10', 'Fall', 'T/TH', 'class description', 'Rm 208 Lucas Hall', 3);
-INSERT  INTO professors (first_name, last_name) VALUES ('Amanda', 'Badger');
-INSERT INTO teach (pr_id, cl_id) VALUES (10, 18);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('12:10 - 13:50', 'Fall', 'T/TH', 'class description', 'Rm 208 Lucas Hall', 3);
-INSERT INTO teach (pr_id, cl_id) VALUES (10, 19);
-
-INSERT  INTO classes (time, term, days, description, location, c_id) VALUES ('14:00 - 15:40', 'Fall', 'T/TH', 'class description', 'Rm 208 Lucas Hall', 3);
-INSERT INTO teach (pr_id, cl_id) VALUES (10, 20);
-
--- END
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (1, 1);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (2, 1);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 1);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (4, 2);
+INSERT INTO schedule2class(cl_id, sch_id) VALUES (3, 2);
