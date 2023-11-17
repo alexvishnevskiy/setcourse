@@ -44,9 +44,14 @@ def list_all_classes_for_schedule(schedule_id):
 @cross_origin(supports_credentials=True)
 def get_class_info(class_id):
     info, status = class_info(class_id)
-    if status != SUCCESS:
+    if status == SUCCESS:
+        return jsonify(info), HTTPStatus.OK
+    elif status == NO_COURSE:
+        return jsonify({"message": "No course for this class"}), HTTPStatus.INTERNAL_SERVER_ERROR
+    elif status == NO_CLASS:
+        return jsonify({"message": "No class"}), HTTPStatus.INTERNAL_SERVER_ERROR
+    else:
         return {}, HTTPStatus.INTERNAL_SERVER_ERROR
-    return jsonify(info), HTTPStatus.OK
 
 
 @app.route('/class/all/get', methods=['GET'])
@@ -70,5 +75,5 @@ def delete_class_from_schedule(schedule_id, class_id):
     return jsonify(status), HTTPStatus.OK
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))    
+    port = int(os.environ.get("PORT", 8081))    
     app.run(host='0.0.0.0', port=port)

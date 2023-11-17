@@ -64,6 +64,9 @@ def getProfessorFromClass(classId):
     if professor2class is None:
         return None, NO_CLASS
 
+    if len(professor2class) == 0:
+        return None, NO_PROFESSOR
+
     professor = models.Professors.query.get(professor2class[0].pr_id)
     if professor is None:
         return None, NO_PROFESSOR
@@ -98,3 +101,10 @@ def deleteCourseFromSchedule(scheduleId, classId):
         return SUCCESS
     else:
         return NO_SCHEDULE_OR_CLASS
+
+def getNumberOfSeats(classId):
+    n_seats = models.classAvail.query.get(classId)
+
+    if n_seats is None:
+        return None, NO_CLASS
+    return n_seats.available_seats, SUCCESS
