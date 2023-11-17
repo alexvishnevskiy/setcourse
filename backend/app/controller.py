@@ -70,16 +70,16 @@ def add_class2schedule(scheduleID, classID):
         
 
     # calculate total units for all courses in schedule
-    classesID += [class_.cl_id]
-    total_units = 0
-    for cl_id in classesID:
-        course_, status = getCourseFromClass(cl_id)
-        if status != SUCCESS:
-            return status
-        total_units += course_.units
+    # classesID += [class_.cl_id]
+    # total_units = 0
+    # for cl_id in classesID:
+    #     course_, status = getCourseFromClass(cl_id)
+    #     if status != SUCCESS:
+    #         return status
+    #     total_units += course_.units
 
-    if total_units > MAX_UNITS:
-        return NOT_ENOUGH_UNITS
+    # if total_units > MAX_UNITS:
+    #     return NOT_ENOUGH_UNITS
 
     # add class to schedule
     status = addClassToSchedule(scheduleID, classID)
@@ -123,6 +123,7 @@ def class_info(classID):
 
     # class information
     class_info, status = getClass(classID)
+    print('class info:', class_info)
     if status != SUCCESS:
         return {}, status
     

@@ -55,3 +55,8 @@ div.calendar_default_cell {
     right: 5px !important;
     top: 5px !important; 
 }
+
+.calendar_default_event {
+    left: 0% !important;
+    width: 100% !important; 
+}

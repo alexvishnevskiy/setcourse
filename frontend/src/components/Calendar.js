@@ -44,6 +44,8 @@ const Calendar = ({ config, courses }) => {
         adjustEachCourse();
     }, [config, courses]);
 
+    console.log('passed into daypilot:', courses)
+
     return (
         <>
             <DayPilotCalendar {...config} {...courses} />
