@@ -262,14 +262,14 @@ function Search({courses, setCourses, scheduleID}) {
                 let newClasses = [];
                 for(let fetchedClass of fetchedSchedule){
                     const startTime = formatTimeString(`2023-11-02T${fetchedClass.start}:00`);
-                    const endTime = formatTimeString(`2023-11-02T${fetchedClass.end}:00`); 
+                    const endTime = formatTimeString(`2023-11-02T${fetchedClass.end}:00`);
                     newClasses.push({
                         'resource': fetchedClass.days,
                         'start': `2023-11-02T${fetchedClass.start}:00`,
                         'end': `2023-11-02T${fetchedClass.end}:00`,
                         'text': `${fetchedClass.title}\n${startTime}-${endTime}`,
                         'title': fetchedClass.title,
-                        'id': fetchedClass.class_id
+                        'id': fetchedClass.class_id,
                     });
                 }
                 setCourses({
@@ -353,10 +353,6 @@ function Search({courses, setCourses, scheduleID}) {
     return (
         <div className="site-container d-flex flex-column position-relative" style={{
             height: '100vh',
-            backgroundColor: "#D9FFE1",
-            backgroundImage: "url('/searchBackground.png')", 
-            backgroundPosition: "right bottom", 
-            backgroundRepeat: "no-repeat"
         }}>
             {openCourseInfoModal && <CourseInfoModal courseInfo={courseInfo} btnInfo={[
                 {
@@ -395,7 +391,7 @@ function Search({courses, setCourses, scheduleID}) {
                             <Link to="/" className="text-reset m-0 p-0 w-auto d-flex gap-2" style={{
                                 textDecoration: 'none'
                             }}>
-                                <Button text="View Schedule" icon={<BiCalendar />} color={"#67B0F0"} />
+                                <Button text="View Schedule" icon={<BiCalendar />} color={"#55c2da"} />
                             </Link> 
                         </div>
                         <SearchBar setSearchQuery={setSearchQuery} searchQuery={searchQuery} onSearch={onSearch}/> 

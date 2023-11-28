@@ -15,8 +15,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route index element={<Home courses={courses} setCourses={setCourses} scheduleID={scheduleID}/>} />
-          <Route path='/search' element={<Search courses={courses} setCourses={setCourses} scheduleID={scheduleID}/>} />
+          <Route index element={<Home courses={courses} setCourses={setCourses} scheduleID={scheduleID} />} />
+          <Route path='/search' element={<Search courses={courses} setCourses={setCourses} scheduleID={scheduleID} />} />
           <Route path='/login' element={<Login />} />
         </Routes>
       </BrowserRouter>

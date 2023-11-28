@@ -139,7 +139,7 @@ function Home({ courses, setCourses, scheduleID}) {
                     'end': `2023-11-02T${singleClass.end}:00`,
                     'text': `${singleClass.title}\n${startTime}-${endTime}`,
                     'title': singleClass.title,
-                    'id': singleClass.class_id
+                    'id': singleClass.class_id,
                 }
                 classesArr.push(classObj);
             }
@@ -170,7 +170,7 @@ function Home({ courses, setCourses, scheduleID}) {
     }
 
     return (
-      <div className="vh-100 d-flex flex-column position-relative" style={{backgroundColor: "#F2EDFF", backgroundImage: "url('/homeBackground.png')", backgroundPosition: "right bottom", backgroundRepeat: "no-repeat"}}>
+      <div className="vh-100 d-flex flex-column position-relative" style={{}}>
         {openDeleteModal && <DeleteCourseModal setOpenDeleteModal={setOpenDeleteModal} onConfirmDelete={onConfirmDelete} itemToDelete={itemToDelete}/>}
         {openCourseInfoModal && <CourseInfoModal courseInfo={courseInfo} btnInfo={[
             {
@@ -188,7 +188,7 @@ function Home({ courses, setCourses, scheduleID}) {
                     <Link to="/search" className="text-reset m-0 p-0 w-auto d-flex gap-2" style={{
                         textDecoration: 'none'
                     }}>
-                        <Button text="Add Course" icon={<BiPlus />} color={"#44DB56"} />
+                        <Button text="Add Course" icon={<BiPlus />} color={"#1ED760"} />
                     </Link>
                 </div>
                 <div className="calendar m-0 p-0" style={{flex: 1}}>

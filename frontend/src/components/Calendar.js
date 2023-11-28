@@ -17,14 +17,6 @@ const Calendar = ({ config, courses }) => {
         return (90*durationInMinutes)/60;
     }
 
-    const colors = {
-        1: "#D1DCDB", 
-        2: "#C1A4D2", 
-        3: "#E9E9E9", 
-        4: "#d2c9a5", 
-        5: "#c77b58"
-    };  
-
     useEffect(() => {
         const adjustEachCourse = () => {
             if(courses.events.length <= 0) return;
@@ -38,7 +30,7 @@ const Calendar = ({ config, courses }) => {
                 const heightInPixels = determineHeightInPixels(start, end);
                 courseList[i].style.setProperty("top", `${startPixel}px`, "important");
                 courseList[i].style.setProperty("height", `${heightInPixels}px`, "important");
-                courseList[i].children[0].style.setProperty("background", `${colors[courseID]}`, "important");
+                courseList[i].children[0].style.setProperty("background", `#E0E0E0 `, "important");
             }
         }  
         adjustEachCourse();
